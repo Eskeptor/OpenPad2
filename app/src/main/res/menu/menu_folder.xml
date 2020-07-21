@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_folder_view_type"
+        android:title="@string/menu_main_change_list"
+        android:icon="@drawable/baseline_view_module_black_24"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_folder_new"
+        android:title="@string/menu_folder_new"
+        android:icon="@drawable/baseline_create_new_folder_black_24"
+        app:showAsAction="ifRoom" />
+</menu>

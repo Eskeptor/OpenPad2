@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">OpenPad2</string>
+    <string name="test" translatable="false">Test</string>
+    <string name="main_empty" translatable="false">Empty.</string>
+    <string name="fab_text">Text</string>
+    <string name="fab_paint">Paint</string>
+    <string name="menu_main_change_list">Change List Type</string>
+    <string name="menu_folder_new">New Folder</string>
+    <string name="menu_main_settings">Settings</string>
 </resources>
