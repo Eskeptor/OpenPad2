@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <androidx.preference.PreferenceCategory android:title="@string/settings_separator_general">
+
+        <androidx.preference.Preference
+            android:title="@string/settings_general_font_title"
+            android:summary="@string/settings_general_font_summary"
+            android:key="settings_key_font"/>
+
+        <androidx.preference.CheckBoxPreference
+            android:defaultValue="true"
+            android:title="@string/settings_general_admob"
+            android:summary="@string/settings_general_admob_summary"
+            android:key="settings_key_admob"/>
+
+        <androidx.preference.CheckBoxPreference
+            android:defaultValue="true"
+            android:title="@string/settings_general_viewimage"
+            android:summary="@string/settings_general_viewimage_summary"
+            android:key="settings_key_viewimage" />
+
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory android:title="@string/settings_separator_information">
+
+        <androidx.preference.Preference
+            android:title="@string/settings_information_info_title"
+            android:summary="@string/settings_information_info_summary"
+            android:key="settings_key_info"/>
+
+        <androidx.preference.Preference
+            android:title="@string/settings_information_version_title"
+            android:summary="@string/settings_information_version_summary"
+            android:key="settings_key_version" />
+
+        <androidx.preference.Preference
+            android:title="@string/settings_information_updatelist_title"
+            android:summary="@string/settings_information_updatelist_summary"
+            android:key="settings_key_updatelist" />
+
+        <androidx.preference.Preference
+            android:title="@string/settings_information_bug_title"
+            android:summary="@string/settings_information_bug_summary"
+            android:key="settings_key_bugreport" />
+
+        <androidx.preference.Preference
+            android:title="@string/settings_information_license_title"
+            android:summary="@string/settings_information_license_summary"
+            android:key="settings_key_license" />
+
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory android:title="@string/settings_separator_etc">
+
+        <androidx.preference.CheckBoxPreference
+            android:defaultValue="true"
+            android:key="settings_key_swipe_delete"
+            android:summary="@string/settings_etc_swipe_delete_summary"
+            android:title="@string/settings_etc_swipe_delete_title" />
+
+        <androidx.preference.Preference
+            android:key="settings_key_security"
+            android:title="@string/settings_etc_security" />
+
+    </androidx.preference.PreferenceCategory>
+</androidx.preference.PreferenceScreen>

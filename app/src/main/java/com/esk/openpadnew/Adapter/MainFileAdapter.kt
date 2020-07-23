@@ -16,6 +16,8 @@ import com.esk.openpadnew.DataType.MainFileObject
 import com.esk.openpadnew.MainActivity
 import com.esk.openpadnew.*
 import com.esk.openpadnew.R
+import kotlinx.android.synthetic.main.item_main_big.view.*
+import kotlinx.android.synthetic.main.item_main_small.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -38,8 +40,8 @@ class MainFileViewHolder(val view: View, isBig: Boolean) : RecyclerView.ViewHold
     val title: TextView
     val contents: TextView
     val date: TextView
-    private val foregroundView: RelativeLayout
-    private val backgroundView: RelativeLayout
+    val foregroundView: RelativeLayout
+    val backgroundView: RelativeLayout
 
     init {
         if (isBig) {

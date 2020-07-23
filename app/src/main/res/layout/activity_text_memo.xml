@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TextMemoActivity">
+
+
+    <io.github.mthli.knife.KnifeText
+        android:id="@+id/text_field"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_above="@id/text_tools"
+        android:padding="@dimen/text_field_padding"
+        android:gravity="top|start"
+        android:scrollbars="vertical"
+        android:background="@android:color/transparent"
+
+        app:bulletColor="@color/black"
+        app:bulletRadius="@dimen/text_tools_bullet_radius"
+        app:bulletGapWidth="@dimen/text_tools_bullet_gap_width"
+        app:historyEnable="true"
+        app:historySize="99"
+        app:linkColor="@color/defaultColorAccent"
+        app:linkUnderline="true"
+        app:quoteColor="@color/black"
+        app:quoteStripeWidth="@dimen/text_tools_quote_stripe_width"
+        app:quoteCapWidth="@dimen/text_tools_quote_gap_width"/>
+
+    <HorizontalScrollView
+        android:id="@+id/text_tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:scrollbars="none"
+        android:background="@color/defaultColorPrimary">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/text_tools_clear"
+                android:layout_width="@dimen/text_tools_button"
+                android:layout_height="@dimen/text_tools_button"
+                android:contentDescription="@null"
+                android:background="?android:selectableItemBackground"
+                android:src="@drawable/baseline_format_clear_white_24"
+                android:scaleType="center"/>
+
+            <ImageButton
+                android:id="@+id/text_tools_undo"
+                android:layout_width="@dimen/text_tools_button"
+                android:layout_height="@dimen/text_tools_button"
+                android:contentDescription="@null"
+                android:background="?android:selectableItemBackground"
+                android:src="@drawable/baseline_undo_white_24"
+                android:scaleType="center"/>
+
+            <ImageButton
+                android:id="@+id/text_tools_redo"
+                android:layout_width="@dimen/text_tools_button"
+                android:layout_height="@dimen/text_tools_button"
+                android:contentDescription="@null"
+                android:background="?android:selectableItemBackground"
+                android:src="@drawable/baseline_redo_white_24"
+                android:scaleType="center"/>
+
+            <ImageButton
+                android:id="@+id/text_tools_bold"
+                android:layout_width="@dimen/text_tools_button"
+                android:layout_height="@dimen/text_tools_button"
+                android:contentDescription="@null"
+                android:background="?android:selectableItemBackground"
+                android:src="@drawable/baseline_format_bold_white_24"
+                android:scaleType="center"/>
+
+            <ImageButton
+                android:id="@+id/text_tools_italic"
+                android:layout_width="@dimen/text_tools_button"
+                android:layout_height="@dimen/text_tools_button"
+                android:contentDescription="@null"
+                android:background="?android:selectableItemBackground"
+                android:src="@drawable/baseline_format_italic_white_24"
+                android:scaleType="center"/>
+
+            <ImageButton
+                android:id="@+id/text_tools_underline"
+                android:layout_width="@dimen/text_tools_button"
+                android:layout_height="@dimen/text_tools_button"
+                android:contentDescription="@null"
+                android:background="?android:selectableItemBackground"
+                android:src="@drawable/baseline_format_underlined_white_24"
+                android:scaleType="center"/>
+
+            <ImageButton
+                android:id="@+id/text_tools_bullet"
+                android:layout_width="@dimen/text_tools_button"
+                android:layout_height="@dimen/text_tools_button"
+                android:contentDescription="@null"
+                android:background="?android:selectableItemBackground"
+                android:src="@drawable/baseline_format_list_bulleted_white_24"
+                android:scaleType="center"/>
+
+            <ImageButton
+                android:id="@+id/text_tools_strikethrough"
+                android:layout_width="@dimen/text_tools_button"
+                android:layout_height="@dimen/text_tools_button"
+                android:contentDescription="@null"
+                android:background="?android:selectableItemBackground"
+                android:src="@drawable/baseline_format_strikethrough_white_24"
+                android:scaleType="center"/>
+
+            <ImageButton
+                android:id="@+id/text_tools_quote"
+                android:layout_width="@dimen/text_tools_button"
+                android:layout_height="@dimen/text_tools_button"
+                android:contentDescription="@null"
+                android:background="?android:selectableItemBackground"
+                android:src="@drawable/baseline_format_quote_white_24"
+                android:scaleType="center"/>
+
+            <ImageButton
+                android:id="@+id/text_tools_link"
+                android:layout_width="@dimen/text_tools_button"
+                android:layout_height="@dimen/text_tools_button"
+                android:contentDescription="@null"
+                android:background="?android:selectableItemBackground"
+                android:src="@drawable/baseline_insert_link_white_24"
+                android:scaleType="center"/>
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+</RelativeLayout>

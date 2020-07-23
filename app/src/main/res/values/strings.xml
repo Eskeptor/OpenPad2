@@ -1,10 +1,134 @@
 <resources>
-    <string name="app_name">OpenPad2</string>
-    <string name="test" translatable="false">Test</string>
-    <string name="main_empty" translatable="false">Empty.</string>
-    <string name="fab_text">Text</string>
-    <string name="fab_paint">Paint</string>
-    <string name="menu_main_change_list">Change List Type</string>
-    <string name="menu_folder_new">New Folder</string>
+    <string name="app_name">Notepad</string>
     <string name="menu_main_settings">Settings</string>
+    <string name="fab_text">Text note</string>
+    <string name="fab_paint">Paint note</string>
+    <string name="back_pressed">Press the \'Back\' button once again to exit.</string>
+    <string name="text_link_dialog_input" translatable="false">http(s)://</string>
+    <string name="text_link_dialog_title">Inset link</string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="item_main_image_title">Paint note</string>
+    <string name="menu_main_change_list">Change List Type</string>
+    <string name="test" translatable="false">Test Test Test Test</string>
+    <string name="menu_folder_new">New folder</string>
+    <string name="folder_dialog_new_hint">Input folder name</string>
+    <string name="folder_dialog_new_title">Create new folder</string>
+    <string name="folder_dialog_new_warning1">Please enter a valid folder name.</string>
+    <string name="folder_dialog_new_warning2">The folder name is empty.</string>
+    <string name="folder_dialog_new_warning3">The folder already exists.</string>
+    <string name="folder_dialog_new_success">Folder created successfully.</string>
+    <string name="folder_dialog_new_fail">Failed to create folder.</string>
+    <string name="folder_delete_warning1">You can\'t remove the default folder.</string>
+    <string name="folder_delete_success">Removed folder.</string>
+    <string name="folder_delete_fail">Failed to remove folder.</string>
+    <string name="folder_dialog_delete_title">Warning</string>
+    <string name="dialog_yes">Yes</string>
+    <string name="dialog_no">NO</string>
+    <string name="folder_dialog_delete_com1">Are you sure you want to delete the folder?</string>
+    <string name="folder_dialog_delete_com2">All memos in the folder will be deleted.</string>
+    <string name="folder_default">Default folder</string>
+    <string name="folder_widget">Widget folder</string>
+    <string name="item_folder_files">" files"</string>
+    <string name="main_delete_success">Removed note.</string>
+    <string name="main_delete_fail">Failed to remove note.</string>
+    <string name="main_dialog_delete">Are you sure you want to remove the note?</string>
+    <string name="main_delete_restore">Restore</string>
+    <string name="menu_sort_by_name">Name</string>
+    <string name="menu_sort_by_time">Last modified time</string>
+    <string name="menu_sort_by_files">File count</string>
+    <string name="menu_sort_by_time2">Creation time</string>
+    <string name="folder_title">Folder</string>
+    <string name="text_title_new">New note</string>
+    <string name="text_title">Note</string>
+    <string name="main_empty" translatable="false">Empty.</string>
+    <string name="paint_tools_brush">Brush</string>
+    <string name="paint_tools_eraser">Eraser</string>
+    <string name="paint_tools_shape">Shapes</string>
+    <string name="test_short" translatable="false">Test</string>
+    <string name="frag_brush_title">Size</string>
+    <string name="paint_dialog_description">Image summary not found.\nDo you want to complete the image summary?</string>
+    <string name="paint_dialog_description_title">Create description</string>
+    <string name="menu_paint_reset">Reset</string>
+    <string name="menu_paint_undo">Undo</string>
+    <string name="menu_paint_des">Description</string>
+    <string name="paint_dialog_description_hint">Image description</string>
+    <string name="dialog_save">Save</string>
+    <string name="paint_dialog_save_title">Change Detection</string>
+    <string name="paint_dialog_save">Do you want to save the note?</string>
+    <string name="settings_title">Settings</string>
+    <string name="settings_separator_information">Program Information</string>
+    <string name="settings_information_info_title">Info</string>
+    <string name="settings_separator_general">General</string>
+    <string name="settings_general_font_title">Font</string>
+    <string name="settings_general_font_summary">General settings for fonts.</string>
+    <string name="settings_information_info_summary">Program information and version.</string>
+    <string name="settings_dialog_info_title">About Openpad</string>
+    <string name="settings_dialog_info_copyright" translatable="false">Copyright © 2018 Jeon Ye Chan</string>
+    <string name="settings_information_version_title">Version</string>
+    <string name="settings_information_version_summary">Program Version</string>
+    <string name="settings_font_fontsize">Font Size</string>
+    <string name="settings_dialog_font_context">Changing Font size affects only the note screen.</string>
+    <string name="settings_font_fonttype">Font type(Custom Font)</string>
+    <string name="settings_information_bug_title">Bug Report</string>
+    <string name="settings_information_bug_summary">Report the bug to the developer.</string>
+    <string name="settings_general_admob">Advertisement</string>
+    <string name="settings_general_admob_summary">Enable or disable the Advertisement.</string>
+    <string name="settings_general_admob_dialog_context">Please restart this application.</string>
+    <string name="settings_separator_etc">Additional functions</string>
+    <string name="settings_information_updatelist_title">Update History</string>
+    <string name="settings_information_updatelist_summary">Shows the update contents.</string>
+    <string name="settings_font_title1">Font detail settings</string>
+    <string name="settings_font_basicfont">Basic font</string>
+    <string name="settings_font_baedaljua">Baedalue Minjok JUA</string>
+    <string name="settings_font_kopubdot">KOPUB Dotum</string>
+    <string name="settings_information_license_title">License</string>
+    <string name="settings_information_license_summary">Open Source Licenses Used for Programs and This Program</string>
+    <string name="settings_general_viewimage">Image Preview</string>
+    <string name="settings_general_viewimage_summary">Preview a drawing on the memo list on the main screen.</string>
+    <string name="settings_etc_security">Security</string>
+    <string name="settings_dialog_font_size">Hello? Have a nice day.</string>
+    <string name="settings_etc_swipe_delete_title">Slide to delete note</string>
+    <string name="settings_etc_swipe_delete_summary">You can swipe a note to remove it.</string>
+    <string name="settings_information_bug_email_choose">Choose an Email client</string>
+    <string name="settings_etc_security_enabled">Enable Security</string>
+    <string name="settings_etc_security_password_reset">Reset Password</string>
+    <string name="settings_etc_security_app_title">Lock Application</string>
+    <string name="settings_etc_security_app_summary">Set a password for the application.</string>
+    <string name="main_dialog_restart_title">Restart</string>
+    <string name="main_dialog_restart_context">Restart to gain permission.</string>
+    <string name="tutorial_page1_title">Hello</string>
+    <string name="tutorial_page1_contents">Welcome to the OpenPad.</string>
+    <string name="tutorial_page2_title">So Simple</string>
+    <string name="tutorial_page2_contents">It\'s intuitive and simple.</string>
+    <string name="tutorial_page3_title">Text note</string>
+    <string name="tutorial_page3_contents">Try using a text note.\n(All notes are saved in HTML style.)</string>
+    <string name="tutorial_page4_title">Paint note</string>
+    <string name="tutorial_page4_contents">Try using a paint note.\n(Paint notes are saved as image files.)</string>
+    <string name="tutorial_page5_title" translatable="false">Free</string>
+    <string name="tutorial_page5_contents">Use all features for free.</string>
+    <string name="tutorial_page6_title">Allow Permissions</string>
+    <string name="tutorial_page6_contents">Requires internal storage access.\n(for saving notes)</string>
+    <string name="password_set">Password Setting</string>
+    <string name="password_reset">Reset Password</string>
+    <string name="password_enter">Enter Password</string>
+    <string name="password_incorrect">Incorrect password</string>
+    <string name="password_again">Please enter again</string>
+    <string name="widget_config_btnAdd">Add widget</string>
+    <string name="widget_config_preview">Preview</string>
+    <string name="widget_config_customize">Change Color</string>
+    <string name="widget_config_customize_tap1_title">Title(Date)</string>
+    <string name="widget_config_customize_tap2_title">Context</string>
+    <string name="widget_config_customize_tap1_sub1">Background</string>
+    <string name="widget_config_customize_tap1_sub2">Font</string>
+    <string name="widget_config_btnReset">Default Value</string>
+    <string name="widget_config_btnLast">Latest Value</string>
+    <string name="widget_title_new">New Widget Memo</string>
+    <string name="widget_context_new">Create a memo by tapping it.</string>
+    <string name="widget_config_default_title">Memo Date</string>
+    <string name="widget_config_default_context">Memo Contexts</string>
+    <string name="paint_txtBrushSize">Size : %d</string>
+    <string name="paint_txtBrushRed" translatable="false">Red : %d</string>
+    <string name="paint_txtBrushGreen" translatable="false">Green : %d</string>
+    <string name="paint_txtBrushBlue" translatable="false">Blue : %d</string>
 </resources>

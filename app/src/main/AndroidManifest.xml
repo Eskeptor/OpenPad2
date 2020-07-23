@@ -9,6 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".UpdateListActivity"></activity>
+        <activity android:name=".TutorialActivity" />
+        <activity android:name=".TextMemoActivity" />
+        <activity android:name=".PasswordActivity" />
+        <activity android:name=".PaintMemoActivity" />
+        <activity android:name=".FolderActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

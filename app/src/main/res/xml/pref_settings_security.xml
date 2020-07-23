@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <androidx.preference.PreferenceCategory android:title="@string/settings_etc_security" >
+        <androidx.preference.CheckBoxPreference
+            android:defaultValue="false"
+            android:key="settings_key_password_app"
+            android:summary="@string/settings_etc_security_app_summary"
+            android:title="@string/settings_etc_security_app_title" />
+        <androidx.preference.Preference
+            android:title="@string/settings_etc_security_password_reset"
+            android:key="settings_key_password_reset"
+            android:enabled="false"/>
+
+    </androidx.preference.PreferenceCategory>
+</androidx.preference.PreferenceScreen>

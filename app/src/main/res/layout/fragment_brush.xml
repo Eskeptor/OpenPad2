@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <Space
+            android:layout_width="30dp"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/frag_brush_width_img"
+            android:layout_width="0dp"
+            android:layout_height="10dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:contentDescription="@null"
+            app:srcCompat="@color/black" />
+
+        <Space
+            android:layout_width="30dp"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/frag_brush_title"
+            android:textColor="@color/black"
+            android:textSize="14sp"/>
+
+        <SeekBar
+            android:id="@+id/frag_brush_width_seek"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:max="40" />
+
+        <EditText
+            android:id="@+id/frag_brush_width_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@null"
+            android:inputType="number"
+            android:maxLines="1"
+            android:text="@string/test_short"
+            android:autofillHints=""/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/frag_brush_red_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/test_short"/>
+
+            <io.feeeei.circleseekbar.CircleSeekBar
+                android:id="@+id/frag_brush_red_seek"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:padding="5dp"
+                app:wheel_max_process="100"
+                app:wheel_pointer_color="@color/defaultColorPrimary"
+                app:wheel_pointer_radius="10dp"
+                app:wheel_reached_width="12dp"
+                app:wheel_reached_color="@color/red"
+                app:wheel_unreached_width="10dp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp">
+
+            <TextView
+                android:id="@+id/frag_brush_green_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/test_short"/>
+
+            <io.feeeei.circleseekbar.CircleSeekBar
+                android:id="@+id/frag_brush_green_seek"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:padding="5dp"
+                app:wheel_max_process="255"
+                app:wheel_pointer_color="@color/defaultColorPrimary"
+                app:wheel_pointer_radius="10dp"
+                app:wheel_reached_width="12dp"
+                app:wheel_reached_color="@color/green"
+                app:wheel_unreached_width="10dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/frag_brush_blue_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/test_short" />
+
+            <io.feeeei.circleseekbar.CircleSeekBar
+                android:id="@+id/frag_brush_blue_seek"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:padding="5dp"
+                app:wheel_max_process="255"
+                app:wheel_pointer_color="@color/defaultColorPrimary"
+                app:wheel_pointer_radius="10dp"
+                app:wheel_reached_width="12dp"
+                app:wheel_reached_color="@color/blue"
+                app:wheel_unreached_width="10dp" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

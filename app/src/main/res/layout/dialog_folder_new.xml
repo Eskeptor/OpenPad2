@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/dialog_folder_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dialog_folder_margin"
+        android:background="@drawable/edit_text"
+        android:hint="@string/folder_dialog_new_hint"
+        android:inputType="text"
+        android:maxLines="1"
+        android:textColor="@color/black"
+        android:textColorHint="@color/blackGray"
+        android:textSize="@dimen/dialog_folder_text_size" />
+
+    <TextView
+        android:id="@+id/dialog_folder_warning"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dialog_folder_margin"
+        android:layout_marginRight="@dimen/dialog_folder_margin"
+        android:text="TextView"
+        android:textColor="@color/defaultColorAccent" />
+</LinearLayout>
