@@ -19,14 +19,18 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.esk.openpadnew.Adapter.ClickAction
 import com.esk.openpadnew.Adapter.MainFileAdapter
 import com.esk.openpadnew.DataType.MainFileObject
+import com.esk.openpadnew.TouchHelper.MainFileItemTouchHelper
+import com.esk.openpadnew.TouchHelper.RecyclerItemTouchHelperListener
 import com.esk.openpadnew.Util.CreateIntent
 import com.esk.openpadnew.Util.LogBot
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 import java.lang.ref.WeakReference
 import java.util.*
@@ -43,7 +47,7 @@ private const val WAIT_FOR_SECOND: Long = 1000L
 private const val HANDLER_CREATE_LIST = 100
 private const val HANDLER_REFRESH = 101
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), RecyclerItemTouchHelperListener {
     // 오브젝트 필드 모음
     private val mToolbar = findViewById<Toolbar>(R.id.toolbar)
     private val mLayoutSort = findViewById<LinearLayout>(R.id.main_layout_sort)
@@ -164,6 +168,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         LogBot.logName("Debugbug").logLevel(LogBot.Level.Error).log("onActivityResult")
         mPasswordFlag = false
         when (resultCode) {
@@ -440,6 +445,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int, position: Int) {
+        val deletedIndex: Int = viewHolder.adapterPosition
+        deleteFile(deletedIndex)
+        mCurFileAdapter.notifyDataSetChanged()
+    }
+
     private class MainHandler(activity: MainActivity) : Handler() {
         private val mActivity: WeakReference<MainActivity> = WeakReference(activity)
 
@@ -448,4 +459,6 @@ class MainActivity : AppCompatActivity() {
             activity?.handleMessage(msg)
         }
     }
+
+
 }

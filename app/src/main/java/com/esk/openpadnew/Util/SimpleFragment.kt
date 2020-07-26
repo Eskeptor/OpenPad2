@@ -16,8 +16,12 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
-import com.esk.openpadnew.R
+import com.esk.openpadnew.*
+import com.esk.openpadnew.DataType.BrushObject
 import io.feeeei.circleseekbar.CircleSeekBar
+import kotlinx.android.synthetic.main.fragment_brush.view.*
+import kotlinx.android.synthetic.main.fragment_eraser.view.*
+import kotlinx.android.synthetic.main.fragment_shape.view.*
 import java.util.regex.Pattern
 
 // 브러쉬의 최대 굵기
