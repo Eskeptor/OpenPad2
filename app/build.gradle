@@ -40,6 +40,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.preference:preference:1.1.1'
+    implementation 'androidx.activity:activity:1.2.0-alpha06'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
@@ -74,7 +75,7 @@ dependencies {
     implementation 'com.cleveroad:slidingtutorial:1.0.9'
 
     // Apache Commons Codec
-    implementation group: 'commons-codec', name: 'commons-codec', version: '1.11'
+    implementation group: 'commons-codec', name: 'commons-codec', version: '20041127.091804'
 
     // Floating Action Button
     // https://github.com/zendesk/android-floating-action-button

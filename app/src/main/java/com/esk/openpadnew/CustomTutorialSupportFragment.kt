@@ -1,5 +1,6 @@
 package com.esk.openpadnew
 
+import android.Manifest
 import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.SharedPreferences
@@ -8,9 +9,12 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
 import com.cleveroad.slidingtutorial.*
+import kotlinx.android.synthetic.main.custom_tutorial_layout_ids_example.*
+import kotlinx.android.synthetic.main.tutorial_page_06.*
 
 private const val TOTAL_PAGES: Int = 6
 private const val REQUEST_CODE_APP_PERMISSION = 10
@@ -53,6 +57,8 @@ class CustomTutorialSupportFragment : TutorialSupportFragment(), OnTutorialPageC
             Log.e("Context", (context != null).toString())
 
         addOnTutorialPageChangeListener(this)
+
+        //tutorial_btn_permission.setOnClickListener(mOnSkipClickListener)
     }
 
     override fun onPageChanged(position: Int) {
@@ -63,6 +69,7 @@ class CustomTutorialSupportFragment : TutorialSupportFragment(), OnTutorialPageC
         val indicatorOptions: IndicatorOptions = IndicatorOptions.newBuilder(requireContext()).build()
         return newTutorialOptionsBuilder(requireContext())
             .setUseInfiniteScroll(false)
+            .setShowSkipButton(true)
             .setPagesColors(mPagesColors)
             .setPagesCount(TOTAL_PAGES)
             .setTutorialPageProvider(TutorialPagesProvider())
@@ -93,9 +100,9 @@ class CustomTutorialSupportFragment : TutorialSupportFragment(), OnTutorialPageC
 
     private fun checkPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (requireActivity().checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-                requireActivity().checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                if (requireActivity().shouldShowRequestPermissionRationale(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                if (shouldShowRequestPermissionRationale(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                     requestPermissions(arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE),
                         REQUEST_CODE_APP_PERMISSION)
                 } else {

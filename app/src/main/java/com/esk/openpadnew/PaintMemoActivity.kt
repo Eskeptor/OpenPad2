@@ -303,6 +303,11 @@ class PaintMemoActivity : AppCompatActivity() {
         mOpenFilePath = null
         mOpenFileSMYPath = null
         mOpenFolderPath = null
+
+        mToolsFragments[0].onDestroy()
+        mToolsFragments[1].onDestroy()
+        mToolsFragments[2].onDestroy()
+
         mToolsEntity.clear()
         mToolsFragments.clear()
     }
@@ -573,6 +578,7 @@ class PaintMemoActivity : AppCompatActivity() {
                             drawLine()
                             invalidate()
                             mIsModified = true
+                            mPath.reset()
                             return false
                         }
                     }

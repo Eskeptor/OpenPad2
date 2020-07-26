@@ -18,12 +18,14 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.esk.openpadnew.Adapter.ClickAction
 import com.esk.openpadnew.Adapter.MainFileAdapter
+import com.esk.openpadnew.Adapter.RecyclerViewPadding
 import com.esk.openpadnew.DataType.MainFileObject
 import com.esk.openpadnew.TouchHelper.MainFileItemTouchHelper
 import com.esk.openpadnew.TouchHelper.RecyclerItemTouchHelperListener
@@ -49,9 +51,6 @@ private const val HANDLER_REFRESH = 101
 
 class MainActivity : AppCompatActivity(), RecyclerItemTouchHelperListener {
     // 오브젝트 필드 모음
-    private val mToolbar = findViewById<Toolbar>(R.id.toolbar)
-    private val mLayoutSort = findViewById<LinearLayout>(R.id.main_layout_sort)
-
     private lateinit var mContextThis: Context
     private lateinit var mMainHandler: MainHandler
     private lateinit var mCurFileAdapter: MainFileAdapter
@@ -77,14 +76,14 @@ class MainActivity : AppCompatActivity(), RecyclerItemTouchHelperListener {
         setContentView(R.layout.activity_main)
 
         // 툴바 생성 밑 폴더 버튼 생성
-        setSupportActionBar(mToolbar)
+        //setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             supportActionBar?.setHomeAsUpIndicator(resources.getDrawable(R.drawable.baseline_folder_black_24, null))
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.WHITE))
-                mLayoutSort.setBackgroundColor(resources.getColor(R.color.white, theme))
-            }
+            //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                //supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.WHITE))
+                //main_layout_sort.setBackgroundColor(resources.getColor(R.color.white, theme))
+           // }
         } else {
             supportActionBar?.setHomeAsUpIndicator(resources.getDrawable(R.drawable.baseline_folder_black_24))
         }
@@ -92,6 +91,107 @@ class MainActivity : AppCompatActivity(), RecyclerItemTouchHelperListener {
         supportActionBar?.elevation = 0.0f
 
         mContextThis = applicationContext
+        mMainHandler = MainHandler(this)
+
+        // 패스워드창 플래그 설정
+        mPasswordFlag = true
+
+        // 처음 실행 체크
+        firstBootCheck()
+
+        // Preference 연결
+        mSharedPref = getSharedPreferences(APP_PREFERENCE, Context.MODE_PRIVATE)
+
+        // 이미지 미리보기 여부에 따른 새로고침을 위한 변수
+        mPrevViewImage = mSharedPref.getBoolean(PREF_VIEW_IMAGE, true)
+
+        // List 의 View Style 확인
+        mIsCurViewStyleList = mSharedPref.getBoolean(PREF_MAIN_VIEW_STYLE, false)
+
+        // List 에 사용할 데코레이션
+        mItemDecoration = RecyclerViewPadding(10, 5, 5, 5)
+
+        // 정렬 타입
+        mCurSortType = when (mSharedPref.getInt(PREF_MAIN_SORT_TYPE, SortType.Name.value)) {
+            SortType.Name.value -> {
+                main_btn_sort_type.setText(R.string.menu_sort_by_name)
+                SortType.Name
+            }
+            // Time = else
+            else                -> {
+                main_btn_sort_type.setText(R.string.menu_sort_by_time)
+                SortType.Time
+            }
+        }
+
+        // 레이아웃 타입 초기화
+        mLayoutTypeList.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
+        mLayoutTypeGrid.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
+
+        // Sort 리스트 팝업 메뉴 생성
+        main_btn_sort_type.setOnClickListener { v: View? ->
+            val popup = PopupMenu(mContextThis, v!!)
+            menuInflater.inflate(R.menu.menu_main_sort, popup.menu)
+            popup.setOnMenuItemClickListener { item: MenuItem? ->
+                if (item != null) {
+                    val id = item.itemId
+                    when (id) {
+                        R.id.menu_main_sort_by_name -> {
+                            sortFiles(SortType.Name)
+                            main_btn_sort_type.setText(R.string.menu_sort_by_name)
+                        }
+                        R.id.menu_main_sort_by_time -> {
+                            sortFiles(SortType.Time)
+                            main_btn_sort_type.setText(R.string.menu_sort_by_time)
+                        }
+                    }
+                }
+                return@setOnMenuItemClickListener false
+            }
+            popup.show()
+        }
+
+        // 정렬 순서(오름차, 내림차) 버튼 연결
+        mIsCurSortASC = mSharedPref.getBoolean(PREF_MAIN_SORT_IS_ASC, true)
+        if (mIsCurSortASC) {
+            main_btn_sort.setImageResource(R.drawable.baseline_up_black_24)
+        } else {
+            main_btn_sort.setImageResource(R.drawable.baseline_down_black_24)
+        }
+        main_btn_sort.setOnClickListener { _: View? ->
+            if (mIsCurSortASC) {
+                mIsCurSortASC = false
+                main_btn_sort.setImageResource(R.drawable.baseline_down_black_24)
+                sortFiles(mCurSortType)
+            } else {
+                mIsCurSortASC = true
+                main_btn_sort.setImageResource(R.drawable.baseline_up_black_24)
+                sortFiles(mCurSortType)
+            }
+        }
+
+        // 왼쪽 하단의 메모 추가 버튼
+        main_memo_menu_text.setOnClickListener{ _: View? ->
+            if (::mContextThis.isInitialized) {
+                val intent: Intent = CreateIntent.createIntent(mContextThis, TextMemoActivity::class.java)
+                intent.putExtra(EXTRA_MEMO_OPEN_FOLDER_URL, mCurFolderPath)
+                startActivityForResult(intent, REQUEST_CODE_IS_MEMO_CREATED)
+                main_memo_menu.collapse()
+                destroyBackup()
+            }
+        }
+        main_memo_menu_paint.setOnClickListener{ _: View? ->
+            if (::mContextThis.isInitialized) {
+                val intent: Intent = CreateIntent.createIntent(mContextThis, PaintMemoActivity::class.java)
+                intent.putExtra(EXTRA_MEMO_OPEN_FOLDER_URL, mCurFolderPath)
+                startActivityForResult(intent, REQUEST_CODE_IS_MEMO_CREATED)
+                main_memo_menu.collapse()
+                destroyBackup()
+            }
+        }
+
+        // 광고 추가
+        //adMob()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -258,44 +358,55 @@ class MainActivity : AppCompatActivity(), RecyclerItemTouchHelperListener {
         if (mCurFolderFileList.isNotEmpty()) {
             mCurFolderFileList.clear()
         }
-        val file = File(mCurFolderPath)
-        val files: Array<File> = file.listFiles { pathname: File? ->
-            if (pathname != null) {
-                return@listFiles pathname.name.endsWith(FILE_EXTENSION_TEXT) ||
-                        pathname.name.endsWith(FILE_EXTENSION_IMAGE)
-            }
-            return@listFiles false
-        }
 
-        if (files.isNotEmpty()) {
-            for (newFile in files) {
-                mCurFolderFileList.add(MainFileObject(newFile, Locale.getDefault().displayCountry, resources.getString(R.string.item_main_image_title)))
-            }
-
-            // 정렬 하기
-            when (mCurSortType) {
-                SortType.Name -> {
-                    if (mIsCurSortASC) {
-                        mCurFolderFileList.sortBy { obj: MainFileObject -> obj.fileTitle }
-                    } else {
-                        mCurFolderFileList.sortByDescending { obj: MainFileObject -> obj.fileTitle }
-                    }
+        if (mCurFolderPath != null) {
+            val file = File(mCurFolderPath!!)
+            val files: Array<File>? = file.listFiles { pathname: File? ->
+                if (pathname != null) {
+                    return@listFiles pathname.name.endsWith(FILE_EXTENSION_TEXT) ||
+                            pathname.name.endsWith(FILE_EXTENSION_IMAGE)
                 }
-                // Time = else
-                else -> {
-                    if (mIsCurSortASC) {
-                        mCurFolderFileList.sortBy { obj: MainFileObject -> obj.modifiedDate }
-                    } else {
-                        mCurFolderFileList.sortByDescending { obj: MainFileObject -> obj.modifiedDate }
-                    }
-                }
+                return@listFiles false
             }
 
-            // 메모가 있을 때 Empty 문구 안보이기
-            main_txt_empty.visibility = View.GONE
-        } else {
-            // 메모가 없을 때 Empty 문구 보이기
-            main_txt_empty.visibility = View.VISIBLE
+            if (files != null) {
+                if (files.isNotEmpty()) {
+                    for (newFile in files) {
+                        mCurFolderFileList.add(
+                            MainFileObject(
+                                newFile,
+                                Locale.getDefault().displayCountry,
+                                resources.getString(R.string.item_main_image_title)
+                            )
+                        )
+                    }
+
+                    // 정렬 하기
+                    when (mCurSortType) {
+                        SortType.Name -> {
+                            if (mIsCurSortASC) {
+                                mCurFolderFileList.sortBy { obj: MainFileObject -> obj.fileTitle }
+                            } else {
+                                mCurFolderFileList.sortByDescending { obj: MainFileObject -> obj.fileTitle }
+                            }
+                        }
+                        // Time = else
+                        else -> {
+                            if (mIsCurSortASC) {
+                                mCurFolderFileList.sortBy { obj: MainFileObject -> obj.modifiedDate }
+                            } else {
+                                mCurFolderFileList.sortByDescending { obj: MainFileObject -> obj.modifiedDate }
+                            }
+                        }
+                    }
+
+                    // 메모가 있을 때 Empty 문구 안보이기
+                    main_txt_empty.visibility = View.GONE
+                } else {
+                    // 메모가 없을 때 Empty 문구 보이기
+                    main_txt_empty.visibility = View.VISIBLE
+                }
+            }
         }
     }
 

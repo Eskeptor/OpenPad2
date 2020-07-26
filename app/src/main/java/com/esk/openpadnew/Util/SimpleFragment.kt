@@ -47,7 +47,7 @@ enum class FragmentType {
  */
 class SimpleFragment : Fragment() {
     private lateinit var mFragmentType: FragmentType            // 프래그먼트의 타입
-    private lateinit var mPaintActivity: PaintMemoActivity      // Paint 액티비티
+    private var mPaintActivity: PaintMemoActivity? = null       // Paint 액티비티
 
     var mCurBrushSize: Int = BRUSH_BASIC_SIZE                   // 현재 브러쉬의 크기
         private set
@@ -151,7 +151,7 @@ class SimpleFragment : Fragment() {
                     val message = Message()
                     message.what = HANDLER_CHANGE_COLOR
                     message.obj = Color.rgb(mColorRed, mColorGreen, mColorBlue)
-                    mPaintActivity.paintHandler.sendMessage(message)
+                    mPaintActivity?.paintHandler?.sendMessage(message)
                 }
 
                 // 현재 브러쉬의 크기는 mCurBrushSize
@@ -298,13 +298,13 @@ class SimpleFragment : Fragment() {
                             val message = Message()
                             message.what = HANDLER_CHANGE_BRUSH_TYPE
                             message.obj = BrushObject.ShapeType.Circle
-                            mPaintActivity.paintHandler.sendMessage(message)
+                            mPaintActivity?.paintHandler?.sendMessage(message)
                         }
                         R.id.frag_shape_rectangle -> {
                             val message = Message()
                             message.what = HANDLER_CHANGE_BRUSH_TYPE
                             message.obj = BrushObject.ShapeType.Rectangle
-                            mPaintActivity.paintHandler.sendMessage(message)
+                            mPaintActivity?.paintHandler?.sendMessage(message)
                         }
                     }
                 }
@@ -337,6 +337,12 @@ class SimpleFragment : Fragment() {
         val message = Message()
         message.what = HANDLER_CHANGE_BRUSH_SIZE
         message.obj = convertPixelsToDpInt(brushWidthSeek.progress.toFloat(), view.context)
-        mPaintActivity.paintHandler.sendMessage(message)
+        mPaintActivity?.paintHandler?.sendMessage(message)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        mPaintActivity = null
     }
 }
