@@ -70,6 +70,8 @@ class SimpleFragment : Fragment() {
             val fragment = SimpleFragment()
             fragment.mFragmentType = fragmentType
             fragment.mPaintActivity = paintActivity
+
+            LogBot.logName("Debugbug").logLevel(LogBot.Level.Error).log("Fragment Create : $fragmentType")
             return fragment
         }
 
@@ -342,7 +344,7 @@ class SimpleFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-
+        LogBot.logName("Debugbug").logLevel(LogBot.Level.Error).log("Fragment Create : $mFragmentType")
         mPaintActivity = null
     }
 }

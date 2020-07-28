@@ -29,6 +29,9 @@ import kotlinx.android.synthetic.main.dialog_paint_description.view.*
 import java.io.File
 import java.io.FileOutputStream
 import java.lang.ref.WeakReference
+import kotlin.math.abs
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 private const val PAINT_COLOR_MAX: Int = 255
 private const val PAINT_MINIMUM_LINE_LENGTH_PIXEL: Float = 0.0f
@@ -54,8 +57,8 @@ class TabEntity(val title: String) : CustomTabEntity {
 class PaintMemoActivity : AppCompatActivity() {
     companion object {
         private lateinit var mShapeType: BrushObject.ShapeType
-        private lateinit var mMenuItemUndo: MenuItem
-        private lateinit var mMenuItemReset: MenuItem
+        private var mMenuItemUndo: MenuItem? = null
+        private var mMenuItemReset: MenuItem? = null
     }
 
     lateinit var paintHandler: PaintHandler
@@ -111,8 +114,8 @@ class PaintMemoActivity : AppCompatActivity() {
         mToolsFragments.add(shapeFragment)
         val toolsTitle: Array<String> =
             arrayOf(getString(R.string.paint_tools_brush), getString(R.string.paint_tools_eraser), getString(R.string.paint_tools_shape))
-        for (i in 0 until toolsTitle.size) {
-            mToolsEntity.add(TabEntity(toolsTitle[i]))
+        for (element in toolsTitle) {
+            mToolsEntity.add(TabEntity(element))
         }
         paint_tab.setTabData(mToolsEntity, this, R.id.paint_tab_pager, mToolsFragments)
         paint_tab.currentTab = 0
@@ -146,7 +149,7 @@ class PaintMemoActivity : AppCompatActivity() {
         paint_tab_pager.visibility = View.GONE
 
         // 페인트툴 인디케이터 연결
-        paint_tools_indicator.setOnClickListener { _: View? ->
+        paint_tools_indicator.setOnClickListener {
             if (mIsToolUp) {
                 paint_tab_pager.visibility = View.GONE
                 paint_tools_indicator.setImageResource(R.drawable.baseline_up_white_24)
@@ -197,20 +200,20 @@ class PaintMemoActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_paint, menu)
-        mMenuItemUndo = menu!!.findItem(R.id.menu_paint_undo)
-        mMenuItemUndo.isVisible = false
-        mMenuItemReset = menu.findItem(R.id.menu_paint_reset)
-        mMenuItemReset.isVisible = false
+        mMenuItemUndo = menu?.findItem(R.id.menu_paint_undo)
+        mMenuItemUndo?.isVisible = false
+        mMenuItemReset = menu?.findItem(R.id.menu_paint_reset)
+        mMenuItemReset?.isVisible = false
 
         if (mOpenFilePath == null) {
-            menu.findItem(R.id.menu_paint_description).isVisible = false
+            menu?.findItem(R.id.menu_paint_description)?.isVisible = false
         }
 
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id: Int? = item?.itemId
+        val id: Int? = item.itemId
         if (id != null) {
             when (id) {
                 android.R.id.home -> {
@@ -225,8 +228,8 @@ class PaintMemoActivity : AppCompatActivity() {
                 }
                 R.id.menu_paint_reset -> {
                     mPaintClass.resetPaint(mOpenFilePath != null, mOpenFilePath)
-                    mMenuItemUndo.isVisible = false
-                    mMenuItemReset.isVisible = false
+                    mMenuItemUndo?.isVisible = false
+                    mMenuItemReset?.isVisible = false
                 }
             }
         }
@@ -304,9 +307,10 @@ class PaintMemoActivity : AppCompatActivity() {
         mOpenFileSMYPath = null
         mOpenFolderPath = null
 
-        mToolsFragments[0].onDestroy()
-        mToolsFragments[1].onDestroy()
-        mToolsFragments[2].onDestroy()
+        mPaintClass.destroyPaint()
+
+        mMenuItemUndo = null
+        mMenuItemReset = null
 
         mToolsEntity.clear()
         mToolsFragments.clear()
@@ -335,7 +339,7 @@ class PaintMemoActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (resultCode) {
-            AppCompatActivity.RESULT_OK -> {
+            RESULT_OK -> {
                 when (requestCode) {
                     REQUEST_CODE_PASSWORD_FLAG -> {
                         mPasswordFlag = false
@@ -346,8 +350,7 @@ class PaintMemoActivity : AppCompatActivity() {
     }
 
     fun handleMessage(message: Message) {
-        val what: Int = message.what
-        when (what) {
+        when (message.what) {
             HANDLER_LOAD -> {
                 // 페인트 클래스 생성
                 mPaintClass = PaintClass(mContextThis)
@@ -506,9 +509,7 @@ class PaintMemoActivity : AppCompatActivity() {
         override fun onDetachedFromWindow() {
             super.onDetachedFromWindow()
             destroyPaint()
-            if (mBrushObject != null) {
-                mBrushObject?.init()
-            }
+            mBrushObject?.init()
         }
 
         /**
@@ -521,17 +522,17 @@ class PaintMemoActivity : AppCompatActivity() {
             }
 
             if (mBrushObject != null) {
-                mBrushObject?.init()
+                mBrushObject!!.init()
                 mBrushObject = null
             }
 
             if (mCanvasPaint != null) {
-                mCanvasPaint?.reset()
+                mCanvasPaint!!.reset()
                 mCanvasPaint = null
             }
 
             if (mBrushPaint != null) {
-                mBrushPaint?.reset()
+                mBrushPaint!!.reset()
                 mBrushPaint = null
             }
 
@@ -548,8 +549,8 @@ class PaintMemoActivity : AppCompatActivity() {
                 BrushObject.ShapeType.None -> {
                     when (action) {
                         MotionEvent.ACTION_MOVE -> {
-                            if (Math.abs(mCurX - mPrevX) >= PAINT_MINIMUM_LINE_LENGTH_PIXEL ||
-                                Math.abs(mCurY - mPrevY) >= PAINT_MINIMUM_LINE_LENGTH_PIXEL) {
+                            if (abs(mCurX - mPrevX) >= PAINT_MINIMUM_LINE_LENGTH_PIXEL ||
+                                abs(mCurY - mPrevY) >= PAINT_MINIMUM_LINE_LENGTH_PIXEL) {
                                 mPath.quadTo(mPrevX, mPrevY, mCurX, mCurY)
                                 mPrevX = mCurX
                                 mPrevY = mCurY
@@ -569,12 +570,12 @@ class PaintMemoActivity : AppCompatActivity() {
                             return true
                         }
                         MotionEvent.ACTION_UP -> {
-                            mBrushObject!!.brushTypes.add(BrushObject.ShapeType.None)
-                            mBrushObject!!.brushPaths.add(Path(mPath))
-                            mBrushObject!!.brushSizes.add(mBrushPaint!!.strokeWidth)
-                            mBrushObject!!.brushColors.add(mCurColor)
-                            mMenuItemUndo.isVisible = true
-                            mMenuItemReset.isVisible = true
+                            mBrushObject?.brushTypes?.add(BrushObject.ShapeType.None)
+                            mBrushObject?.brushPaths?.add(Path(mPath))
+                            mBrushObject?.brushSizes?.add(mBrushPaint!!.strokeWidth)
+                            mBrushObject?.brushColors?.add(mCurColor)
+                            mMenuItemUndo?.isVisible = true
+                            mMenuItemReset?.isVisible = true
                             drawLine()
                             invalidate()
                             mIsModified = true
@@ -594,17 +595,19 @@ class PaintMemoActivity : AppCompatActivity() {
                             return true
                         }
                         MotionEvent.ACTION_MOVE -> {
-                            mRadius = (Math.sqrt(Math.pow((mCurX - mPrevX).toDouble(), 2.0) + Math.pow((mCurY - mPrevY).toDouble(), 2.0)) / 2).toFloat()
+                            mRadius = (sqrt((mCurX - mPrevX).toDouble().pow(2.0) + (mCurY - mPrevY).toDouble()
+                                .pow(2.0)
+                            ) / 2).toFloat()
                             invalidate()
                             return true
                         }
                         MotionEvent.ACTION_UP -> {
-                            mBrushObject!!.brushTypes.add(BrushObject.ShapeType.Circle)
-                            mBrushObject!!.brushPaths.add(CircleObject(mPrevX + (mCurX - mPrevX) / 2, mPrevY + (mCurY - mPrevY) / 2, mRadius))
-                            mBrushObject!!.brushSizes.add(mBrushPaint!!.strokeWidth)
-                            mBrushObject!!.brushColors.add(mCurColor)
-                            mMenuItemUndo.isVisible = true
-                            mMenuItemReset.isVisible = true
+                            mBrushObject?.brushTypes?.add(BrushObject.ShapeType.Circle)
+                            mBrushObject?.brushPaths?.add(CircleObject(mPrevX + (mCurX - mPrevX) / 2, mPrevY + (mCurY - mPrevY) / 2, mRadius))
+                            mBrushObject?.brushSizes?.add(mBrushPaint!!.strokeWidth)
+                            mBrushObject?.brushColors?.add(mCurColor)
+                            mMenuItemUndo?.isVisible = true
+                            mMenuItemReset?.isVisible = true
                             drawLine()
                             invalidate()
                             mIsModified = true
@@ -628,12 +631,12 @@ class PaintMemoActivity : AppCompatActivity() {
                             return true
                         }
                         MotionEvent.ACTION_UP -> {
-                            mBrushObject!!.brushTypes.add(BrushObject.ShapeType.Rectangle)
-                            mBrushObject!!.brushPaths.add(Rect(mPrevX.toInt(), mPrevY.toInt(), mCurX.toInt(), mCurY.toInt()))
-                            mBrushObject!!.brushSizes.add(mBrushPaint!!.strokeWidth)
-                            mBrushObject!!.brushColors.add(mCurColor)
-                            mMenuItemUndo.isVisible = true
-                            mMenuItemReset.isVisible = true
+                            mBrushObject?.brushTypes?.add(BrushObject.ShapeType.Rectangle)
+                            mBrushObject?.brushPaths?.add(Rect(mPrevX.toInt(), mPrevY.toInt(), mCurX.toInt(), mCurY.toInt()))
+                            mBrushObject?.brushSizes?.add(mBrushPaint!!.strokeWidth)
+                            mBrushObject?.brushColors?.add(mCurColor)
+                            mMenuItemUndo?.isVisible = true
+                            mMenuItemReset?.isVisible = true
                             drawLine()
                             invalidate()
                             mIsModified = true
@@ -709,48 +712,55 @@ class PaintMemoActivity : AppCompatActivity() {
          * 그리기의 Undo 기능
          */
         fun undoCanvas() {
-            if (mBrushObject!!.brushPaths.isNotEmpty()) {
-                if (mFileOpened) {          // 현재 파일이 열려있다면
-                    if (mBitmap != null) {
-                        mBitmap?.recycle()  // 비트맵이 있다면 리사이클
-                        mBitmap = null
-                    }
-                    // 비트맵을 불러온다.
-                    mBitmap = BitmapFactory.decodeFile(mFilename).copy(Bitmap.Config.ARGB_8888, true)
-                } else {                    // 현재 파일이 열려있지 않다면
-                    if (mBitmap != null) {
-                        mBitmap?.recycle()  // 비트맵이 있다면 리사이클
-                        mBitmap = null
-                    }
-                    // 비트맵을 새로 생성한다.
-                    mBitmap = Bitmap.createBitmap(mScreenWidth, mScreenHeight, Bitmap.Config.ARGB_8888)
-                }
-
-                // 캔버스 생성
-                if (mBitmap != null) {
-                    mCanvas = Canvas(mBitmap!!)
-                    if (!mFileOpened) {
-                        mCanvas.drawARGB(
-                            PAINT_COLOR_MAX,
-                            PAINT_COLOR_MAX,
-                            PAINT_COLOR_MAX,
-                            PAINT_COLOR_MAX
+            if (mBrushObject != null) {
+                if (mBrushObject!!.brushPaths.isNotEmpty()) {
+                    if (mFileOpened) {          // 현재 파일이 열려있다면
+                        if (mBitmap != null) {
+                            mBitmap?.recycle()  // 비트맵이 있다면 리사이클
+                            mBitmap = null
+                        }
+                        // 비트맵을 불러온다.
+                        mBitmap =
+                            BitmapFactory.decodeFile(mFilename).copy(Bitmap.Config.ARGB_8888, true)
+                    } else {                    // 현재 파일이 열려있지 않다면
+                        if (mBitmap != null) {
+                            mBitmap?.recycle()  // 비트맵이 있다면 리사이클
+                            mBitmap = null
+                        }
+                        // 비트맵을 새로 생성한다.
+                        mBitmap = Bitmap.createBitmap(
+                            mScreenWidth,
+                            mScreenHeight,
+                            Bitmap.Config.ARGB_8888
                         )
                     }
+
+                    // 캔버스 생성
+                    if (mBitmap != null) {
+                        mCanvas = Canvas(mBitmap!!)
+                        if (!mFileOpened) {
+                            mCanvas.drawARGB(
+                                PAINT_COLOR_MAX,
+                                PAINT_COLOR_MAX,
+                                PAINT_COLOR_MAX,
+                                PAINT_COLOR_MAX
+                            )
+                        }
+                    }
+
+                    mBrushObject!!.brushTypes.removeLast()
+                    mBrushObject!!.brushPaths.removeLast()
+                    mBrushObject!!.brushSizes.removeLast()
+                    mBrushObject!!.brushColors.removeLast()
+                    mPath.reset()
+                    drawLine()
                 }
 
-                mBrushObject!!.brushTypes.removeLast()
-                mBrushObject!!.brushPaths.removeLast()
-                mBrushObject!!.brushSizes.removeLast()
-                mBrushObject!!.brushColors.removeLast()
-                mPath.reset()
-                drawLine()
-            }
-
-            if (mBrushObject!!.brushPaths.isEmpty()) {
-                mMenuItemUndo.isVisible = false
-                mMenuItemReset.isVisible = false
-                mIsModified = false
+                if (mBrushObject!!.brushPaths.isEmpty()) {
+                    mMenuItemUndo?.isVisible = false
+                    mMenuItemReset?.isVisible = false
+                    mIsModified = false
+                }
             }
             invalidate()
         }
@@ -850,13 +860,12 @@ class PaintMemoActivity : AppCompatActivity() {
          */
         private fun drawLine() {
             //mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
-
-            val itBrushSize: Iterator<Float> = mBrushObject!!.brushSizes.iterator()
-            val itBrushPath: Iterator<Any> = mBrushObject!!.brushPaths.iterator()
-            val itBrushColor: Iterator<Int> = mBrushObject!!.brushColors.iterator()
-            val itBrushType: Iterator<BrushObject.ShapeType> = mBrushObject!!.brushTypes.iterator()
-
             if (mBrushPaint != null) {
+                val itBrushSize: Iterator<Float> = mBrushObject!!.brushSizes.iterator()
+                val itBrushPath: Iterator<Any> = mBrushObject!!.brushPaths.iterator()
+                val itBrushColor: Iterator<Int> = mBrushObject!!.brushColors.iterator()
+                val itBrushType: Iterator<BrushObject.ShapeType> = mBrushObject!!.brushTypes.iterator()
+
                 while (itBrushSize.hasNext()) {
                     mBrushPaint!!.strokeWidth = itBrushSize.next()
                     mBrushPaint!!.color = itBrushColor.next()
