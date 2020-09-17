@@ -1,10 +1,16 @@
 package com.esk.openpadnew
 
+import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
+import com.andrognito.pinlockview.IndicatorDots
+import com.andrognito.pinlockview.PinLockListener
+import com.andrognito.pinlockview.PinLockView
 import com.esk.openpadnew.Util.AES256Util
+import com.esk.openpadnew.Util.LogBot
 import kotlinx.android.synthetic.main.activity_password.*
 
 private const val DEFAULT_KEY_CODE: String = "ABCDABCDABCDABCD"
@@ -13,7 +19,7 @@ class PasswordActivity : AppCompatActivity() {
     private var mKeyToken: String = ""
     private lateinit var mAES256: AES256Util
     private var mPasswordType: Int = PasswordIntentType.Set.value
-    private var mPass: String = ""
+    private var mPrevPassword: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,45 +43,68 @@ class PasswordActivity : AppCompatActivity() {
             }
         }
 
-//        var isRepeat = false
-//        val passCodeView: PassCodeView = findViewById(R.id.pass_view)
-//        passCodeView.setOnTextChangeListener { pass: String? ->
-//            when (mPasswordType) {
-//                PasswordIntentType.Execute.value, PasswordIntentType.MainExecute.value -> {
-//                    val realPass = mAES256.aesDecode(sharedPref.getString(PREF_PASSWORD, ""))
-//                    if (pass?.length == 4) {
-//                        if (pass == realPass) {
-//                            setResult(Activity.RESULT_OK)
-//                            finish()
-//                        } else {
-//                            passCodeView.reset()
-//                            pass_txtComment.text = getString(R.string.password_incorrect)
-//                        }
-//                    }
-//                }
-//                else -> {
-//                    if (pass?.length == 4) {
-//                        if (isRepeat) {
-//                            if (pass == mPass) {
-//                                val editor: SharedPreferences.Editor = sharedPref.edit()
-//                                editor.putString(PREF_PASSWORD, mAES256.aesEncode(pass))
-//                                editor.putBoolean(PREF_SET_PASSWORD, true)
-//                                editor.apply()
-//                                setResult(Activity.RESULT_OK)
-//                                finish()
-//                            } else {
-//                                passCodeView.setError(true)
-//                            }
-//                        } else {
-//                            mPass = pass
-//                            passCodeView.reset()
-//                            isRepeat = true
-//                            pass_txtComment.text = getString(R.string.password_again)
-//                        }
-//                    }
-//                }
-//            }
-//        }
+        var isRepeat = false
+        val pinLockView: PinLockView = findViewById(R.id.pin_lock_view)
+        val pinLockIndicator: IndicatorDots = findViewById(R.id.pin_indicator)
+        val pinLockListener: PinLockListener = object : PinLockListener {
+            override fun onComplete(pin: String) {
+                //LogBot.logName("Debugbug").logLevel(LogBot.Level.Error).log("Pin complete: $pin")
+            }
+
+            override fun onEmpty() {
+                //LogBot.logName("Debugbug").logLevel(LogBot.Level.Error).log("Pin empty")
+            }
+
+            override fun onPinChange(pinLength: Int, intermediatePin: String) {
+                //LogBot.logName("Debugbug").logLevel(LogBot.Level.Error).log("Pin changed, new length $pinLength with intermediate pin $intermediatePin")
+
+                if (pinLength == 4) {
+                    when (mPasswordType) {
+                        PasswordIntentType.Execute.value, PasswordIntentType.MainExecute.value -> {
+                            val realPass = sharedPref.getString(PREF_PASSWORD, "")
+                            if (realPass != null && realPass.isNotEmpty()) {
+                                val decodePass = mAES256.aesDecode(realPass)
+                                if (intermediatePin == decodePass) {
+                                    setResult(Activity.RESULT_OK)
+                                    finish()
+                                } else {
+                                    pinLockView.resetPinLockView()
+                                    pass_txtComment.text = getString(R.string.password_incorrect)
+                                }
+                            }
+                        }
+                        else -> {
+
+                            if (isRepeat)
+                            {
+                                if (mPrevPassword == intermediatePin) {
+                                    val editor: SharedPreferences.Editor = sharedPref.edit()
+                                    editor.putString(PREF_PASSWORD, mAES256.aesEncode(intermediatePin))
+                                    editor.putBoolean(PREF_SET_PASSWORD, true)
+                                    editor.apply()
+                                    setResult(Activity.RESULT_OK)
+                                    finish()
+                                } else {
+                                    pinLockView.resetPinLockView()
+                                }
+                            }
+                            else
+                            {
+                                pinLockView.resetPinLockView()
+                                mPrevPassword = intermediatePin
+                                isRepeat = true
+                                pass_txtComment.text = getString(R.string.password_again)
+                            }
+                        }
+                    }
+
+                }
+                //val realPass = mAES256.aesDecode(sharedPref.getString(PREF_PASSWORD, ""))
+            }
+        }
+        pinLockView.setPinLockListener(pinLockListener)
+        pinLockView.attachIndicatorDots(pinLockIndicator)
+
     }
 
     override fun onBackPressed() {

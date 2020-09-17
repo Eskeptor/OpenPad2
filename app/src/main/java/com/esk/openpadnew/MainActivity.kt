@@ -6,8 +6,6 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,10 +14,8 @@ import android.os.Message
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.LinearLayout
+import android.widget.PopupMenu
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.PopupMenu
-import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -130,12 +126,11 @@ class MainActivity : AppCompatActivity(), RecyclerItemTouchHelperListener {
 
         // Sort 리스트 팝업 메뉴 생성
         main_btn_sort_type.setOnClickListener { v: View? ->
-            val popup = PopupMenu(mContextThis, v!!)
+            val popup = PopupMenu(mContextThis, v)
             menuInflater.inflate(R.menu.menu_main_sort, popup.menu)
             popup.setOnMenuItemClickListener { item: MenuItem? ->
                 if (item != null) {
-                    val id = item.itemId
-                    when (id) {
+                    when (item.itemId) {
                         R.id.menu_main_sort_by_name -> {
                             sortFiles(SortType.Name)
                             main_btn_sort_type.setText(R.string.menu_sort_by_name)

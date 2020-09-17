@@ -12,7 +12,8 @@
             android:defaultValue="true"
             android:title="@string/settings_general_admob"
             android:summary="@string/settings_general_admob_summary"
-            android:key="settings_key_admob"/>
+            android:key="settings_key_admob"
+            android:enabled="false"/>
 
         <androidx.preference.CheckBoxPreference
             android:defaultValue="true"
@@ -61,7 +62,7 @@
 
         <androidx.preference.Preference
             android:key="settings_key_security"
-            android:title="@string/settings_etc_security" />
+            android:title="@string/settings_etc_security"/>
 
     </androidx.preference.PreferenceCategory>
 </androidx.preference.PreferenceScreen>

@@ -171,74 +171,160 @@ class SettingsActivity : AppCompatActivity() {
             val security: Preference? = findPreference("settings_key_security")
 
             val clickListener: Preference.OnPreferenceClickListener = Preference.OnPreferenceClickListener { preference: Preference? ->
-                val key: String = preference!!.key
-                when (key) {
-                    "settings_key_info" -> {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(MY_GITHUB))
-                        startActivity(intent)
-                    }
-                    "settings_key_version" -> {
-
-                    }
-                    "settings_key_font" -> {
-                        mPragmentManager.beginTransaction().replace(android.R.id.content, mFontAct).commit()
-                        mActiveScreen = ActiveScreenType.Font
-                    }
-                    "settings_key_bugreport" -> {
-                        val intent = Intent(Intent.ACTION_SEND)
-                        val address: Array<String> = arrayOf(DEVELOPER_MAIL)
-                        intent.type = "message/rfc822"
-                        intent.putExtra(Intent.EXTRA_EMAIL, address)
-                        intent.putExtra(Intent.EXTRA_SUBJECT, "")
-                        intent.putExtra(Intent.EXTRA_TEXT, "")
-                        startActivity(Intent.createChooser(intent, getString(R.string.settings_information_bug_email_choose)))
-                    }
-                    "settings_key_license" -> {
-                        val notices = Notices()
-                        val openpadLicense = OpenpadLicense()
-                        val accLicense = ApacheCCLicense()
-                        val circleLicense = CircleSeekbarLicense()
-                        val fabLicense = FloatingActionButtonLicense()
-                        val flycoLicense = FlycoTabLayoutLicense()
-                        val glideLicense = GlideLicense()
-                        val knifeLicense = KnifeLicense()
-                        val licenseDialogLicense = LicenseDialogLicense()
-                        val stLicense = SlidingTutorialLicense()
-
-                        notices.addNotice(Notice(openpadLicense.name, openpadLicense.url, openpadLicense.getLicenseName(), openpadLicense))
-                        notices.addNotice(Notice(accLicense.name, accLicense.url, accLicense.getLicenseName(), accLicense))
-                        notices.addNotice(Notice(circleLicense.name, circleLicense.url, circleLicense.getLicenseName(), circleLicense))
-                        notices.addNotice(Notice(fabLicense.name, fabLicense.url, fabLicense.getLicenseName(), fabLicense))
-                        notices.addNotice(Notice(flycoLicense.name, flycoLicense.url, flycoLicense.getLicenseName(), flycoLicense))
-                        notices.addNotice(Notice(glideLicense.name, glideLicense.url, glideLicense.getLicenseName(), glideLicense))
-                        notices.addNotice(Notice(knifeLicense.name, knifeLicense.url, knifeLicense.getLicenseName(), knifeLicense))
-                        notices.addNotice(Notice(licenseDialogLicense.name, licenseDialogLicense.url, licenseDialogLicense.getLicenseName(), licenseDialogLicense))
-                        notices.addNotice(Notice(stLicense.name, stLicense.url, stLicense.getLicenseName(), stLicense))
-                        LicensesDialog.Builder(activity)
-                            .setNotices(notices)
-                            .setShowFullLicenseText(false)
-                            .setIncludeOwnLicense(false)
-                            .build()
-                            .show()
-                    }
-                    "settings_key_admob" -> {
-                        val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
-                        builder.setTitle(R.string.settings_general_admob)
-                        builder.setMessage(R.string.settings_general_admob_dialog_context)
-                        builder.setPositiveButton(R.string.dialog_ok) { dialog: DialogInterface?, _: Int ->
-                            dialog!!.dismiss()
+                if (preference != null) {
+                    when (preference.key) {
+                        "settings_key_info" -> {
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(MY_GITHUB))
+                            startActivity(intent)
                         }
-                        builder.show()
-                    }
-                    "settings_key_security" -> {
-                        if (mSharedPref.getBoolean(PREF_SET_PASSWORD, false)) {
-                            val intent = CreateIntent.createIntent(activity, PasswordActivity::class.java)
-                            intent.putExtra(EXTRA_PASSWORD_INTENT_TYPE, PasswordIntentType.Execute.value)
-                            startActivityForResult(intent, REQUEST_CODE_PASSWORD)
-                        } else {
-                            mPragmentManager.beginTransaction().replace(android.R.id.content, mSecurityAct).commit()
+                        "settings_key_version" -> {
+
                         }
-                        mActiveScreen = ActiveScreenType.Security
+                        "settings_key_font" -> {
+                            mPragmentManager.beginTransaction()
+                                .replace(android.R.id.content, mFontAct).commit()
+                            mActiveScreen = ActiveScreenType.Font
+                        }
+                        "settings_key_bugreport" -> {
+                            val intent = Intent(Intent.ACTION_SEND)
+                            val address: Array<String> = arrayOf(DEVELOPER_MAIL)
+                            intent.type = "message/rfc822"
+                            intent.putExtra(Intent.EXTRA_EMAIL, address)
+                            intent.putExtra(Intent.EXTRA_SUBJECT, "")
+                            intent.putExtra(Intent.EXTRA_TEXT, "")
+                            startActivity(
+                                Intent.createChooser(
+                                    intent,
+                                    getString(R.string.settings_information_bug_email_choose)
+                                )
+                            )
+                        }
+                        "settings_key_license" -> {
+                            val notices = Notices()
+                            val openpadLicense = OpenpadLicense()
+                            val accLicense = ApacheCCLicense()
+                            val circleLicense = CircleSeekbarLicense()
+                            val fabLicense = FloatingActionButtonLicense()
+                            val flycoLicense = FlycoTabLayoutLicense()
+                            val glideLicense = GlideLicense()
+                            val knifeLicense = KnifeLicense()
+                            val licenseDialogLicense = LicenseDialogLicense()
+                            val stLicense = SlidingTutorialLicense()
+                            val pinLockLicense = PinLockViewLicense()
+
+                            notices.addNotice(
+                                Notice(
+                                    openpadLicense.name,
+                                    openpadLicense.url,
+                                    openpadLicense.getLicenseName(),
+                                    openpadLicense
+                                )
+                            )
+                            notices.addNotice(
+                                Notice(
+                                    accLicense.name,
+                                    accLicense.url,
+                                    accLicense.getLicenseName(),
+                                    accLicense
+                                )
+                            )
+                            notices.addNotice(
+                                Notice(
+                                    circleLicense.name,
+                                    circleLicense.url,
+                                    circleLicense.getLicenseName(),
+                                    circleLicense
+                                )
+                            )
+                            notices.addNotice(
+                                Notice(
+                                    fabLicense.name,
+                                    fabLicense.url,
+                                    fabLicense.getLicenseName(),
+                                    fabLicense
+                                )
+                            )
+                            notices.addNotice(
+                                Notice(
+                                    flycoLicense.name,
+                                    flycoLicense.url,
+                                    flycoLicense.getLicenseName(),
+                                    flycoLicense
+                                )
+                            )
+                            notices.addNotice(
+                                Notice(
+                                    glideLicense.name,
+                                    glideLicense.url,
+                                    glideLicense.getLicenseName(),
+                                    glideLicense
+                                )
+                            )
+                            notices.addNotice(
+                                Notice(
+                                    knifeLicense.name,
+                                    knifeLicense.url,
+                                    knifeLicense.getLicenseName(),
+                                    knifeLicense
+                                )
+                            )
+                            notices.addNotice(
+                                Notice(
+                                    licenseDialogLicense.name,
+                                    licenseDialogLicense.url,
+                                    licenseDialogLicense.getLicenseName(),
+                                    licenseDialogLicense
+                                )
+                            )
+                            notices.addNotice(
+                                Notice(
+                                    stLicense.name,
+                                    stLicense.url,
+                                    stLicense.getLicenseName(),
+                                    stLicense
+                                )
+                            )
+                            notices.addNotice(
+                                Notice(
+                                    pinLockLicense.name,
+                                    pinLockLicense.url,
+                                    pinLockLicense.getLicenseName(),
+                                    pinLockLicense
+                                )
+                            )
+                            LicensesDialog.Builder(activity)
+                                .setNotices(notices)
+                                .setShowFullLicenseText(false)
+                                .setIncludeOwnLicense(false)
+                                .build()
+                                .show()
+                        }
+                        "settings_key_admob" -> {
+                            val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+                            builder.setTitle(R.string.settings_general_admob)
+                            builder.setMessage(R.string.settings_general_admob_dialog_context)
+                            builder.setPositiveButton(R.string.dialog_ok) { dialog: DialogInterface?, _: Int ->
+                                dialog!!.dismiss()
+                            }
+                            builder.show()
+                        }
+                        "settings_key_security" -> {
+                            if (mSharedPref.getBoolean(PREF_SET_PASSWORD, false)) {
+                                val intent = CreateIntent.createIntent(
+                                    activity,
+                                    PasswordActivity::class.java
+                                )
+                                intent.putExtra(
+                                    EXTRA_PASSWORD_INTENT_TYPE,
+                                    PasswordIntentType.Execute.value
+                                )
+                                startActivityForResult(intent, REQUEST_CODE_PASSWORD)
+                            } else {
+                                mPragmentManager.beginTransaction()
+                                    .replace(android.R.id.content, mSecurityAct).commit()
+                            }
+                            mActiveScreen = ActiveScreenType.Security
+                        }
                     }
                 }
                 return@OnPreferenceClickListener false
@@ -344,6 +430,7 @@ class SettingsActivity : AppCompatActivity() {
                         }
                         REQUEST_CODE_PASSWORD -> {
                             mPasswordFlag = false
+                            mResetPassword?.isEnabled = true
                         }
                     }
                 }
@@ -365,6 +452,7 @@ class SettingsActivity : AppCompatActivity() {
                     val sharedPrefEditor: SharedPreferences.Editor = mSharedPref.edit()
                     sharedPrefEditor.putBoolean(PREF_SET_PASSWORD, false)
                     sharedPrefEditor.apply()
+                    mResetPassword?.isEnabled = false
                 } else {
                     val intent = CreateIntent.createIntent(activity, PasswordActivity::class.java)
                     intent.putExtra(EXTRA_PASSWORD_INTENT_TYPE, PasswordIntentType.Set.value)
