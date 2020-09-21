@@ -1,6 +1,7 @@
 package com.esk.openpadnew
 
 import android.os.Environment
+import com.esk.openpadnew.SortType.*
 import java.io.File
 
 const val FILE_EXTENSION_TEXT: String = ".html"
@@ -29,6 +30,7 @@ const val APP_PREFERENCE: String = "OpenPadPreference"
 const val APP_MASTER_FOLDER_NAME: String = "OpenPadMemo"
 const val APP_DEFAULT_FOLDER_NAME: String = "Default"
 const val APP_WIDGET_FOLDER_NAME: String = "Widget"
+const val APP_WIDGET_PREFERENCE: String = "Widget_Pref"
 val APP_INTERNAL_PATH: String = Environment.getExternalStorageDirectory().absolutePath + File.separator + APP_MASTER_FOLDER_NAME
 val APP_INTERNAL_DEFAULT_FOLDER_PATH: String = APP_INTERNAL_PATH + File.separator + APP_DEFAULT_FOLDER_NAME
 val APP_INTERNAL_WIDGET_FOLDER_PATH: String = APP_INTERNAL_PATH + File.separator + APP_WIDGET_FOLDER_NAME
@@ -41,7 +43,29 @@ const val EXTRA_PASSWORD_INTENT_TYPE: String = "EXTRA_PASSWORD_INTENT_TYPE"
 const val EXTRA_PASSWORD_SET: String = "EXTRA_PASSWORD_SET"
 const val EXTRA_PASSWORD_MATCH: String = "EXTRA_PASSWORD_MATCH"
 
+const val INTENT_EXTRA_MEMO_OPEN_FILEURL: String = "MEMO_OPEN_FILEURL"
+const val INTENT_EXTRA_MEMO_OPEN_FILENAME: String = "MEMO_OPEN_FILENAME"
+const val INTENT_EXTRA_MEMO_OPEN_FOLDERURL: String = "MEMO_OPEN_FOLDERURL"
+const val INTENT_EXTRA_BROWSER_TYPE: String = "BROWSER_TYPE"
+const val INTENT_EXTRA_CURRENT_FOLDERURL: String = "CURRENT_FOLDERURL"
+const val INTENT_EXTRA_MEMO_SAVE_FOLDERURL: String = "MEMO_SAVE_FOLDERURL"
+const val INTENT_EXTRA_MEMO_SAVE_FILEURL: String = "MEMO_SAVE_FILEURL"
+const val INTENT_EXTRA_HELP_INDEX: String = "HELP_INDEX"
+const val INTENT_EXTRA_MEMO_ISWIDGET: String = "MEMO_ISWIDGET"
+const val INTENT_EXTRA_WIDGET_ID: String = "WIDGET_ID"
+const val INTENT_EXTRA_WIDGET_FILE_ID: String = "WIDGET_FILE_ID"
+const val INTENT_EXTRA_PASSWORD: String = "PASSWORD_INTENT_TYPE"
+const val INTENT_EXTRA_PASSWORD_MATCH: String = "PASSWORD_MATCH"
+const val INTENT_EXTRA_PASSWORD_SET: String = "PASSWORD_SET"
+
 const val REQUEST_CODE_PASSWORD_FLAG: Int = 1000
+
+const val DATE_FORMAT_WIDGET_KOREA = "yyyy년 MM월 dd일"
+const val DATE_FORMAT_WIDGET_USA = "MM/dd/yyyy"
+const val DATE_FORMAT_WIDGET_UK = "dd/MM/yyyy"
+const val DATE_FORMAT_MAIN_KOREA = "yyyy년 MM월 dd일 hh:mm a"
+const val DATE_FORMAT_MAIN_USA = "MM/dd/yyyy hh:mm a"
+const val DATE_FORMAT_MAIN_UK = "dd/MM/yyyy hh:mm a"
 
 /**
  * 파일 또는 폴더를 정렬할 때 사용하는 Enum

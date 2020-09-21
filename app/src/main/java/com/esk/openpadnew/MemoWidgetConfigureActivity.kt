@@ -3,10 +3,13 @@ package com.esk.openpadnew
 import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
+import android.view.View
 import android.widget.*
+
 
 // TODO (위젯 만들기)
 /**
@@ -310,16 +313,103 @@ class MemoWidgetConfigureActivity : Activity() {
     }
 
     // TODO (OnClick 생성하기)
+    fun onClick(view: View) {
+        when (view.id) {
+            R.id.widget_config_btnReset -> {
+                mTab1CurBackRed = MemoWidget.WIDGET_TITLE_BACK_COLOR_RED_DEFAULT
+                mTab1CurBackGreen = MemoWidget.WIDGET_TITLE_BACK_COLOR_GREEN_DEFAULT
+                mTab1CurBackBlue = MemoWidget.WIDGET_TITLE_BACK_COLOR_BLUE_DEFAULT
+                mTab1CurFontRed = MemoWidget.WIDGET_TITLE_FONT_COLOR_RED_DEFAULT
+                mTab1CurFontGreen = MemoWidget.WIDGET_TITLE_FONT_COLOR_GREEN_DEFAULT
+                mTab1CurFontBlue = MemoWidget.WIDGET_TITLE_FONT_COLOR_BLUE_DEFAULT
+                mTab2CurBackRed = MemoWidget.WIDGET_CONTEXT_BACK_COLOR_RED_DEFAULT
+                mTab2CurBackGreen = MemoWidget.WIDGET_CONTEXT_BACK_COLOR_GREEN_DEFAULT
+                mTab2CurBackBlue = MemoWidget.WIDGET_CONTEXT_BACK_COLOR_BLUE_DEFAULT
+                mTab2CurFontRed = MemoWidget.WIDGET_CONTEXT_FONT_COLOR_RED_DEFAULT
+                mTab2CurFontGreen = MemoWidget.WIDGET_CONTEXT_FONT_COLOR_GREEN_DEFAULT
+                mTab2CurFontBlue = MemoWidget.WIDGET_CONTEXT_FONT_COLOR_BLUE_DEFAULT
+                mPreviewMainLayout?.setBackgroundColor(Color.rgb(mTab1CurBackRed, mTab1CurBackGreen, mTab1CurBackBlue))
+                mPreviewTitleLayout?.setBackgroundColor(Color.rgb(mTab1CurBackRed, mTab1CurBackGreen, mTab1CurBackBlue))
+                mPreviewTxtTitle?.setTextColor(Color.rgb(mTab1CurFontRed, mTab1CurFontGreen, mTab1CurFontBlue))
+                mPreviewContextLayout?.setBackgroundColor(Color.rgb(mTab2CurBackRed, mTab2CurBackGreen, mTab2CurBackBlue))
+                mPreviewTxtContext?.setTextColor(Color.rgb(mTab2CurFontRed, mTab2CurFontGreen, mTab2CurFontBlue))
+                mTab1BackSeekRed?.progress = mTab1CurBackRed
+                mTab1BackSeekGreen?.progress = mTab1CurBackGreen
+                mTab1BackSeekBlue?.progress = mTab1CurBackBlue
+                mTab1FontSeekRed?.progress = mTab1CurFontRed
+                mTab1FontSeekGreen?.progress = mTab1CurFontGreen
+                mTab1FontSeekBlue?.progress = mTab1CurFontBlue
+                mTab2BackSeekRed?.progress = mTab2CurBackRed
+                mTab2BackSeekGreen?.progress = mTab2CurBackGreen
+                mTab2BackSeekBlue?.progress = mTab2CurBackBlue
+                mTab2FontSeekRed?.progress = mTab2CurFontRed
+                mTab2FontSeekGreen?.progress = mTab2CurFontGreen
+                mTab2FontSeekBlue?.progress = mTab2CurFontBlue
+            }
+            R.id.widget_config_btnAdd -> {
+                val mSharedPrefEditor = mSharedPref.edit()
+                mSharedPrefEditor.putInt(MemoWidget.WIDGET_TITLE_BACK_COLOR_RED, mTab1CurBackRed)
+                mSharedPrefEditor.putInt(MemoWidget.WIDGET_TITLE_BACK_COLOR_GREEN, mTab1CurBackGreen)
+                mSharedPrefEditor.putInt(MemoWidget.WIDGET_TITLE_BACK_COLOR_BLUE, mTab1CurBackBlue)
+                mSharedPrefEditor.putInt(MemoWidget.WIDGET_TITLE_FONT_COLOR_RED, mTab1CurFontRed)
+                mSharedPrefEditor.putInt(MemoWidget.WIDGET_TITLE_FONT_COLOR_GREEN, mTab1CurFontGreen)
+                mSharedPrefEditor.putInt(MemoWidget.WIDGET_TITLE_FONT_COLOR_BLUE, mTab1CurFontBlue)
+                mSharedPrefEditor.putInt(MemoWidget.WIDGET_CONTEXT_BACK_COLOR_RED, mTab2CurBackRed)
+                mSharedPrefEditor.putInt(MemoWidget.WIDGET_CONTEXT_BACK_COLOR_GREEN, mTab2CurBackGreen)
+                mSharedPrefEditor.putInt(MemoWidget.WIDGET_CONTEXT_BACK_COLOR_BLUE, mTab2CurBackBlue)
+                mSharedPrefEditor.putInt(MemoWidget.WIDGET_CONTEXT_FONT_COLOR_RED, mTab2CurFontRed)
+                mSharedPrefEditor.putInt(MemoWidget.WIDGET_CONTEXT_FONT_COLOR_GREEN, mTab2CurFontGreen)
+                mSharedPrefEditor.putInt(MemoWidget.WIDGET_CONTEXT_FONT_COLOR_BLUE, mTab2CurFontBlue)
+                mSharedPrefEditor.putInt(MemoWidget.WIDGET_ID, mAppWidgetId)
+                mSharedPrefEditor.apply()
+                val context: Context = this@MemoWidgetConfigureActivity
+                val appWidgetManager = AppWidgetManager.getInstance(context)
+                MemoWidget.updateAppWidget(context, appWidgetManager, mAppWidgetId)
+                val resultValue = Intent()
+                resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId)
+                setResult(RESULT_OK, resultValue)
+                finish()
+            }
+            R.id.widget_config_btnLast -> {
+                mTab1CurBackRed = mTab1CurBackRed_Backup
+                mTab1CurBackGreen = mTab1CurBackGreen_Backup
+                mTab1CurBackBlue = mTab1CurBackBlue_Backup
+                mTab1CurFontRed = mTab1CurFontRed_Backup
+                mTab1CurFontGreen = mTab1CurFontGreen_Backup
+                mTab1CurFontBlue = mTab1CurFontBlue_Backup
+                mTab2CurBackRed = mTab2CurBackRed_Backup
+                mTab2CurBackGreen = mTab2CurBackGreen_Backup
+                mTab2CurBackBlue = mTab2CurBackBlue_Backup
+                mTab2CurFontRed = mTab2CurFontRed_Backup
+                mTab2CurFontGreen = mTab2CurFontGreen_Backup
+                mTab2CurFontBlue = mTab2CurFontBlue_Backup
+                mPreviewMainLayout?.setBackgroundColor(Color.rgb(mTab1CurBackRed, mTab1CurBackGreen, mTab1CurBackBlue))
+                mPreviewTitleLayout?.setBackgroundColor(Color.rgb(mTab1CurBackRed, mTab1CurBackGreen, mTab1CurBackBlue))
+                mPreviewTxtTitle?.setTextColor(Color.rgb(mTab1CurFontRed, mTab1CurFontGreen, mTab1CurFontBlue))
+                mPreviewContextLayout?.setBackgroundColor(Color.rgb(mTab2CurBackRed, mTab2CurBackGreen, mTab2CurBackBlue))
+                mPreviewTxtContext?.setTextColor(Color.rgb(mTab2CurFontRed, mTab2CurFontGreen, mTab2CurFontBlue))
+                mTab1BackSeekRed?.progress = mTab1CurBackRed
+                mTab1BackSeekGreen?.progress = mTab1CurBackGreen
+                mTab1BackSeekBlue?.progress = mTab1CurBackBlue
+                mTab1FontSeekRed?.progress = mTab1CurFontRed
+                mTab1FontSeekGreen?.progress = mTab1CurFontGreen
+                mTab1FontSeekBlue?.progress = mTab1CurFontBlue
+                mTab2BackSeekRed?.progress = mTab2CurBackRed
+                mTab2BackSeekGreen?.progress = mTab2CurBackGreen
+                mTab2BackSeekBlue?.progress = mTab2CurBackBlue
+                mTab2FontSeekRed?.progress = mTab2CurFontRed
+                mTab2FontSeekGreen?.progress = mTab2CurFontGreen
+                mTab2FontSeekBlue?.progress = mTab2CurFontBlue
+            }
+        }
+    }
 
     companion object {
 
-        private val PREFS_NAME = "com.eskeptor.openpad2.MemoWidget"
-        private val PREF_PREFIX_KEY = "appwidget_"
-
         // Write the prefix to the SharedPreferences object for this widget
         internal fun saveTitlePref(context: Context, appWidgetId: Int, text: String) {
-            val prefs = context.getSharedPreferences(PREFS_NAME, 0).edit()
-            prefs.putString(PREF_PREFIX_KEY + appWidgetId, text)
+            val prefs = context.getSharedPreferences(APP_WIDGET_PREFERENCE, Context.MODE_PRIVATE).edit()
+            prefs.putString(APP_WIDGET_PREFERENCE + appWidgetId, text)
             prefs.apply()
         }
 
@@ -332,9 +422,11 @@ class MemoWidgetConfigureActivity : Activity() {
 //        }
 
         internal fun deleteTitlePref(context: Context, appWidgetId: Int) {
-            val prefs = context.getSharedPreferences(PREFS_NAME, 0).edit()
-            prefs.remove(PREF_PREFIX_KEY + appWidgetId)
+            val prefs = context.getSharedPreferences(APP_WIDGET_PREFERENCE, Context.MODE_PRIVATE).edit()
+            prefs.remove(APP_WIDGET_PREFERENCE + appWidgetId)
             prefs.apply()
         }
     }
+
+
 }

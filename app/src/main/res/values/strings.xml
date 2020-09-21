@@ -131,4 +131,5 @@
     <string name="paint_txtBrushRed" translatable="false">Red : %d</string>
     <string name="paint_txtBrushGreen" translatable="false">Green : %d</string>
     <string name="paint_txtBrushBlue" translatable="false">Blue : %d</string>
+    <string name="text_widget_title">Widget Memo</string>
 </resources>

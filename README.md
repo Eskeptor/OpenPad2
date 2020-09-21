@@ -8,16 +8,16 @@
  3) Just notepad
  4) Kotlin
 ```
-## What's New? (Last updated 2020.9.17) - Non Build
+## What's New? (Last updated 2020.9.21) - Non Build
 ```
- 1) Update Android X Version
- 2) Change Password Window (PassCodeView -> PinLockView)
+ 1) Add Widget (~ing)
 ```
 ## Lasted Update List
 [View Lists](./UPDATE.md)
 ## Known Bugs
 ```
- 1) Image Note Cache
+ 1) Memory Leaks(Image Note Cache)
+ 2) Memory Leaks(Settings Preferences )
 ```
 ## Development environment
 ```

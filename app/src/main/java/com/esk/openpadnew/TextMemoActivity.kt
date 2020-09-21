@@ -1,5 +1,7 @@
 package com.esk.openpadnew
 
+import android.app.Activity
+import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -30,11 +32,15 @@ class TextMemoActivity : AppCompatActivity() {
     enum class SaveStatus(val value: Int) {
         None(0), New(1), Overwrite(2)
     }
-    private var mCurFilePath:String? = null
-    private var mCurFolderPath:String? = null
-    private var mCurFileMD5: String? = null
-    private lateinit var mSharedPref: SharedPreferences
-    private var mPasswordFlag: Boolean = false
+    private var mCurFilePath: String? = null                // 현재 파일의 경로
+    private var mCurFolderPath: String? = null              // 현재 폴더의 경로
+    private var mCurFileMD5: String? = null                 // 현재 파일의 MD5값 (파일의 내용이 변경되었는지 확인용)
+    private lateinit var mSharedPref: SharedPreferences     // 어플의 SharedPreferences
+    private var mPasswordFlag: Boolean = false              // 보안 플래그
+
+    private var mIsWidget: Boolean = false                  // 위젯에서 호출되었는지 유무
+    private var mWidgetID = 0                               // 위젯의 호출 ID
+    private var mWidgetFileID = 0                           // 위젯과 연결된 파일의 ID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,19 +65,34 @@ class TextMemoActivity : AppCompatActivity() {
         // 하단의 유틸리티 버튼 초기화
         initButton()
 
-        // 메인 액티비티로부터 현재 열린 파일, 폴더의 경로를 받아옴
-        // 새로운 파일을 생성했다면 mCurFilePath 는 null
-        mCurFilePath = intent.getStringExtra(EXTRA_MEMO_OPEN_FILE_URL)
-        mCurFolderPath = intent.getStringExtra(EXTRA_MEMO_OPEN_FOLDER_URL)
+        // 위젯 관련 값
+        mIsWidget = intent.getBooleanExtra(INTENT_EXTRA_MEMO_ISWIDGET, false)
+        mWidgetID = intent.getIntExtra(INTENT_EXTRA_WIDGET_ID, 999)
+        mWidgetFileID = intent.getIntExtra(INTENT_EXTRA_WIDGET_FILE_ID, 999)
 
-        if (mCurFilePath == null) {
-            setTitle(R.string.text_title_new)
-        } else {
-            setTitle(R.string.text_title)
-        }
+        // 위젯으로부터 호출되었다면
+        if (mIsWidget) {
+            val tmpFile = File(APP_INTERNAL_WIDGET_FOLDER_PATH + File.separator + mWidgetID + FILE_EXTENSION_TEXT)
 
-        if (mCurFilePath != null) {
-            TextHandler(this).sendEmptyMessage(HANDLER_GET_MEMO)
+            // 이미 존재하는 파일이면 -> 위젯 메모 수정
+            if (tmpFile.exists()) {
+                setTitle(R.string.text_widget_title)
+                mCurFilePath = tmpFile.path
+                TextHandler(this).sendEmptyMessage(HANDLER_GET_MEMO)
+            } else {    // 존재하지 않는 파일이면 -> 새로운 위젯 메모
+                setTitle(R.string.widget_title_new)
+            }
+        } else {    // 위젯으로부터 호출되지 않고 메인 액티비티에서 호출되었다면
+            // 메인 액티비티로부터 현재 열린 파일, 폴더의 경로를 받아옴
+            // 새로운 파일을 생성했다면 mCurFilePath 는 null
+            mCurFilePath = intent.getStringExtra(EXTRA_MEMO_OPEN_FILE_URL)
+            mCurFolderPath = intent.getStringExtra(EXTRA_MEMO_OPEN_FOLDER_URL)
+            if (mCurFilePath == null) {
+                setTitle(R.string.text_title_new)
+            } else {
+                setTitle(R.string.text_title)
+                TextHandler(this).sendEmptyMessage(HANDLER_GET_MEMO)
+            }
         }
     }
 
@@ -96,9 +117,35 @@ class TextMemoActivity : AppCompatActivity() {
             val clickListener: DialogInterface.OnClickListener = DialogInterface.OnClickListener { dialog, which ->
                 when (which) {
                     AlertDialog.BUTTON_POSITIVE -> {
-                        saveMemo(text_field.toHtml())
+                        if (mIsWidget) {    // 위젯에서 호출 되었다면 (위젯용 메모파일 저장)
+                            if (mCurFilePath == null) {
+                                mCurFilePath = APP_INTERNAL_WIDGET_FOLDER_PATH + File.separator + mWidgetFileID + FILE_EXTENSION_TEXT
+                                var tmpFile = File(mCurFilePath!!)
+                                while (tmpFile.exists()) {
+                                    mWidgetFileID++
+                                    mCurFilePath = APP_INTERNAL_WIDGET_FOLDER_PATH + File.separator + mWidgetFileID + FILE_EXTENSION_TEXT
+                                    tmpFile = File(mCurFilePath!!)
+                                }
+                            }
+
+                            if (TextManager.saveText(text_field.toHtml(), mCurFilePath!!)) {
+                                LogBot.logName("TextMemoActivity - onBackPressed").logLevel(LogBot.Level.Error).log("위젯 내용 저장")
+                            } else {
+                                LogBot.logName("TextMemoActivity - onBackPressed").logLevel(LogBot.Level.Error).log("위젯 내용 저장 실패")
+                            }
+
+                            val appWidgetManager = AppWidgetManager.getInstance(applicationContext)
+                            MemoWidget.updateAppWidget(applicationContext, appWidgetManager, mWidgetID)
+                            val resultValue = Intent()
+                            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mWidgetID)
+                            resultValue.putExtra(INTENT_EXTRA_WIDGET_FILE_ID, mWidgetFileID)
+                            setResult(Activity.RESULT_OK, resultValue)
+
+                        } else {            // 위젯에서 호출되지 않았다면 (일반 메모파일 저장)
+                            saveMemo(text_field.toHtml())
+                            setResult(RESULT_OK)
+                        }
                         dialog.dismiss()
-                        setResult(RESULT_OK)
                         finish()
                     }
                     AlertDialog.BUTTON_NEGATIVE -> {
@@ -299,8 +346,7 @@ class TextMemoActivity : AppCompatActivity() {
     }
 
     private fun handleMessage(message: Message) {
-        val what: Int = message.what
-        when (what) {
+        when (message.what) {
             HANDLER_GET_MEMO    -> {
                 val memoData: String = TextManager.openText(mCurFilePath!!)
                 text_field.fromHtml(memoData)
