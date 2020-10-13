@@ -8,8 +8,11 @@ import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
+import android.text.SpannableStringBuilder
 import android.widget.RemoteViews
+import com.esk.openpadnew.Util.GetKnifeText
 import com.esk.openpadnew.Util.LogBot
+import io.github.mthli.knife.KnifeParser
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
@@ -99,7 +102,7 @@ class MemoWidget : AppWidgetProvider() {
                     LogBot.logName("MemoWidget - updateAppWidget").logLevel(LogBot.Level.Error).log("Make directory - Widget Folder")
                 }
             }
-            val strFileURL = pref.getString(WIDGET_FILE_URL, null)
+            val strFileURL = APP_INTERNAL_WIDGET_FOLDER_PATH + File.separator + mWidgetFileID + FILE_EXTENSION_TEXT
 
             val intent = Intent(context, TextMemoActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -130,27 +133,52 @@ class MemoWidget : AppWidgetProvider() {
             views.setTextColor(R.id.widget_context, Color.rgb(contextFontRed, contextFontGreen, contextFontBlue))
             views.setInt(R.id.widget_mainLayout, "setBackgroundColor", Color.rgb(contextBackRed, contextBackGreen, contextBackBlue))
 
-            if (strFileURL != null) {
+            val tmpFile = File(APP_INTERNAL_WIDGET_FOLDER_PATH + File.separator + mWidgetFileID + FILE_EXTENSION_TEXT)
+
+            var strTitle = ""
+            val strContents: StringBuilder = StringBuilder()
+
+            if (tmpFile.exists()) {
                 var fr: FileReader? = null
                 var br: BufferedReader? = null
                 var nCurLine = 0
                 val STR_CUR_COUNTRY = Locale.getDefault().displayCountry
-
                 var strLine = ""
-                var strTitle = ""
-                val strContents: StringBuilder = StringBuilder()
 
                 try {
                     fr = FileReader(strFileURL)
                     br = BufferedReader(fr)
 
-                    if (STR_CUR_COUNTRY == Locale.KOREA.displayCountry) {
-                        strTitle = SimpleDateFormat(DATE_FORMAT_MAIN_KOREA, Locale.KOREA).format(Date(File(strFileURL).lastModified()))
-                    } else if (STR_CUR_COUNTRY == Locale.UK.displayCountry) {
-                        strTitle = SimpleDateFormat(DATE_FORMAT_MAIN_UK, Locale.UK).format(Date(File(strFileURL).lastModified()))
-                    } else {
-                        strTitle = SimpleDateFormat(DATE_FORMAT_MAIN_USA, Locale.US).format(Date(File(strFileURL).lastModified()))
+                    strTitle = when (STR_CUR_COUNTRY) {
+                        Locale.KOREA.displayCountry -> {
+                            SimpleDateFormat(DATE_FORMAT_MAIN_KOREA, Locale.KOREA).format(
+                                Date(
+                                    File(
+                                        strFileURL
+                                    ).lastModified()
+                                )
+                            )
+                        }
+                        Locale.UK.displayCountry -> {
+                            SimpleDateFormat(DATE_FORMAT_MAIN_UK, Locale.UK).format(
+                                Date(
+                                    File(
+                                        strFileURL
+                                    ).lastModified()
+                                )
+                            )
+                        }
+                        else -> {
+                            SimpleDateFormat(DATE_FORMAT_MAIN_USA, Locale.US).format(
+                                Date(
+                                    File(
+                                        strFileURL
+                                    ).lastModified()
+                                )
+                            )
+                        }
                     }
+
                     while (nCurLine < WIDGET_MAX_LINE) {
                         strLine = br.readLine()
                         if (strLine != null) {
@@ -161,27 +189,37 @@ class MemoWidget : AppWidgetProvider() {
                         }
                     }
                 } catch (e: Exception) {
-                    LogBot.logName("MemoWidget - updateAppWidget").logLevel(LogBot.Level.Error).log(e.toString())
+                    LogBot.logName("MemoWidget - updateAppWidget").logLevel(LogBot.Level.Error)
+                        .log(e.toString())
                 } finally {
                     if (br != null) {
                         try {
                             br.close()
                         } catch (e: Exception) {
-                            LogBot.logName("MemoWidget - updateAppWidget").logLevel(LogBot.Level.Error).log(e.toString())
+                            LogBot.logName("MemoWidget - updateAppWidget")
+                                .logLevel(LogBot.Level.Error).log(e.toString())
                         }
                     }
                     if (fr != null) {
                         try {
                             fr.close()
                         } catch (e: Exception) {
-                            LogBot.logName("MemoWidget - updateAppWidget").logLevel(LogBot.Level.Error).log(e.toString())
+                            LogBot.logName("MemoWidget - updateAppWidget")
+                                .logLevel(LogBot.Level.Error).log(e.toString())
                         }
                     }
                 }
 
-                views.setTextViewText(R.id.widget_title, strTitle)
-                views.setTextViewText(R.id.widget_context, strContents)
+                val builder: SpannableStringBuilder = GetKnifeText.getKnifeText(strContents.toString())
+                strContents.clear()
+                strContents.append(builder)
+            } else {
+                strTitle = context.getString(R.string.widget_title_new)
+                strContents.append(context.getString(R.string.widget_context_new))
             }
+
+            views.setTextViewText(R.id.widget_title, strTitle)
+            views.setTextViewText(R.id.widget_context, strContents)
 
             appWidgetManager.updateAppWidget(appWidgetId, views)
         }

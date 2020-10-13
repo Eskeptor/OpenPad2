@@ -8,21 +8,21 @@
  3) Just notepad
  4) Kotlin
 ```
-## What's New? (Last updated 2020.9.21) - Non Build
+## What's New? (Last updated 2020.10.13) - None Build
 ```
- 1) Add Widget (~ing)
+ 1) Add Widget
 ```
 ## Lasted Update List
 [View Lists](./UPDATE.md)
 ## Known Bugs
 ```
  1) Memory Leaks(Image Note Cache)
- 2) Memory Leaks(Settings Preferences )
+ 2) Memory Leaks(Settings Preferences)
 ```
 ## Development environment
 ```
  Operating System : Windows 10 Pro 64bit
- CPU : AMD Ryzen 5 3600 4.2Ghz
+ CPU : AMD Ryzen 5 3600
  RAM : 32GB
  VGA : Radeon RX5700XT
  Android SDK(Min) : API 19

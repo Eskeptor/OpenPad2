@@ -72,7 +72,7 @@ class TextMemoActivity : AppCompatActivity() {
 
         // 위젯으로부터 호출되었다면
         if (mIsWidget) {
-            val tmpFile = File(APP_INTERNAL_WIDGET_FOLDER_PATH + File.separator + mWidgetID + FILE_EXTENSION_TEXT)
+            val tmpFile = File(APP_INTERNAL_WIDGET_FOLDER_PATH + File.separator + mWidgetFileID + FILE_EXTENSION_TEXT)
 
             // 이미 존재하는 파일이면 -> 위젯 메모 수정
             if (tmpFile.exists()) {
