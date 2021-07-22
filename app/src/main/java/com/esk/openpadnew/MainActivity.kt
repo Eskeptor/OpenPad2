@@ -71,6 +71,12 @@ class MainActivity : AppCompatActivity(), RecyclerItemTouchHelperListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // 파일 경로 할당
+        // 안드로이드11 대응 : 외부 저장경로 -> 앱 내부 저장 경로로 변경
+        APP_INTERNAL_PATH = filesDir.absolutePath
+        APP_INTERNAL_DEFAULT_FOLDER_PATH = APP_INTERNAL_PATH + File.separator + APP_DEFAULT_FOLDER_NAME
+        APP_INTERNAL_WIDGET_FOLDER_PATH = APP_INTERNAL_PATH + File.separator + APP_WIDGET_FOLDER_NAME
+
         // 툴바 생성 밑 폴더 버튼 생성
         //setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

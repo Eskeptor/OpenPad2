@@ -31,9 +31,10 @@ const val APP_MASTER_FOLDER_NAME: String = "OpenPadMemo"
 const val APP_DEFAULT_FOLDER_NAME: String = "Default"
 const val APP_WIDGET_FOLDER_NAME: String = "Widget"
 const val APP_WIDGET_PREFERENCE: String = "Widget_Pref"
-val APP_INTERNAL_PATH: String = Environment.getExternalStorageDirectory().absolutePath + File.separator + APP_MASTER_FOLDER_NAME
-val APP_INTERNAL_DEFAULT_FOLDER_PATH: String = APP_INTERNAL_PATH + File.separator + APP_DEFAULT_FOLDER_NAME
-val APP_INTERNAL_WIDGET_FOLDER_PATH: String = APP_INTERNAL_PATH + File.separator + APP_WIDGET_FOLDER_NAME
+//val APP_INTERNAL_PATH: String = Environment.getExternalStorageDirectory().absolutePath + File.separator + APP_MASTER_FOLDER_NAME
+var APP_INTERNAL_PATH: String =  ""
+var APP_INTERNAL_DEFAULT_FOLDER_PATH: String = ""
+var APP_INTERNAL_WIDGET_FOLDER_PATH: String = ""
 //const val APP_MAIN_LIST_TYPE: String = "isMainListModule"
 // val APP_INTERNAL_DEFAULT_FOLDER_PATH: String = filesDir.absolutePath + File.separator + APP_MASTER_FOLDER_NAME
 
