@@ -88,9 +88,6 @@ class MemoWidgetConfigureActivity : Activity() {
         // 위젯을 나가거나 뒤로가기를 눌렀을때 캔슬 이벤트 발생
         setResult(Activity.RESULT_CANCELED)
 
-        // Preference 연결
-        mSharedPref = getSharedPreferences(APP_PREFERENCE, Context.MODE_PRIVATE)
-
         // Find the widget id from the intent.
         val intent = intent
         val extras = intent.extras
@@ -104,6 +101,9 @@ class MemoWidgetConfigureActivity : Activity() {
             finish()
             return
         }
+
+        // Preference 연결
+        mSharedPref = getSharedPreferences(APP_WIDGET_PREFERENCE + mAppWidgetId, Context.MODE_PRIVATE)
 
         setContentView(R.layout.memo_widget_configure)
 

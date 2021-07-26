@@ -1,3 +1,10 @@
+## Update (2021.07.26) - Alpha1 Build
+```
+ 1) Fix Widget Bug
+   - Widget content disappeared (Solved)
+   - Widget color settings (Solved)
+```
+
 ## Update (2021.07.22) - None Build
 ```
  1) Android 11 Update

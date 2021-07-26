@@ -95,6 +95,7 @@ class MemoWidget : AppWidgetProvider() {
             }
             val pref = context.getSharedPreferences(APP_WIDGET_PREFERENCE + appWidgetId, MODE_PRIVATE)
             val views = RemoteViews(context.packageName, R.layout.memo_widget)
+            mWidgetFileID = pref.getInt(MemoWidget.WIDGET_ID, appWidgetId)
 
             val file = File(APP_INTERNAL_WIDGET_FOLDER_PATH)
             if (!file.exists()) {

@@ -8,11 +8,11 @@
  3) Just notepad
  4) Kotlin
 ```
-## What's New? (Last updated 2021.07.22) - None Build
+## What's New? (Last updated 2021.07.26) - Alpha1 Build
 ```
- 1) Android 11 Update
-   - Previous Path : Environment.getExternalStorageDirectory().absolutePath
-   - Change Path : filesDir.absolutePath (App Internal)
+ 1) Fix Widget Bug
+   - Widget content disappeared (Solved)
+   - Widget color settings (Solved)
 ```
 ## Lasted Update List
 [View Lists](./UPDATE.md)
